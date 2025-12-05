@@ -11,32 +11,31 @@
         {% block stylesheets %}
         {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+      
     </head>
-    <body>
+    <body class="light">
         <header>            
-            <img id="logo" src="{{ asset('images/logo/Logo-le88-ssfond.png') }}" alt="Logo">
-            <div id="div">
+            <a href="{{ path('app_accueil') }}"><img id="logo" src="{{ asset('images/logo/Logo-le88-ssfond.png') }}" alt="Logo"></a>
             <h1>Le 88 Comptoir du Cheveu</h1>
             <div id="navbar">
                 <nav>
-                    <a href="{{path('app_accueil')}}">Accueil</a>
-                    <a href="">Prestation</a>
+                    <a href="{{ path('app_accueil') }}">Accueil</a>
+                    <a href="{{ path('app_prestations') }}">Prestation</a>
                     <a href="">Photos</a>
                     <a href="">Boutique</a>
                     <a href="">Infos/Contact</a>
                 </nav>  
                 <nav>          
-                    <a href="https://www.planity.com/le-88-comptoir-du-cheveu-17137-nieul-sur-mer"><img class="logoNavbar" src="{{ asset('images/logo/Réserver.png') }}" alt="Réserver"></a>
+                    <a href="https://www.planity.com/le-88-comptoir-du-cheveu-17137-nieul-sur-mer" target="_blank"><img class="logoNavbar" src="{{ asset('images/logo/Réserver.png') }}" alt="Réserver"></a>
                     <a href=""><img class="logoNavbar" src="{{ asset('images/logo/Compte.png') }}" alt="Connexion"></a>
+                    <a id="bouton" href=""><img id="icon" src="{{ asset('images/logo/lampe_allumee.png') }}" alt="jour/nuit" title="Jour/Nuit"></a>
                 </nav>
-            </div> 
-            </div>       
+            </div>      
         </header>
 
-        {% block body %}{% endblock %}
+
+            {% block body %}{% endblock %}
+
 
         <footer>
             <div id="footer">
@@ -48,12 +47,20 @@
                 <section id="footContact">
                     <a id="telLogo" href="tel:+33546073679"><img src="{{ asset('images/logo/Telephone.png') }}" alt="Téléphone"></a>
                     <a id="tel" href="tel:+33546073679">05.46.07.36.79</a>
-                    <a href="https://www.facebook.com/le88comptoirducheveu"><img src="{{ asset('images/logo/FB.png') }}" alt="Facebook"></a>
-                    <a href="https://www.instagram.com/le_88_comptoir_du_cheveu/"><img src="{{ asset('images/logo/Insta.png') }}" alt="Instagram"></a>
+                    <a href="https://www.facebook.com/le88comptoirducheveu" target="_blank"><img src="{{ asset('images/logo/FB.png') }}" alt="Facebook"></a>
+                    <a href="https://www.instagram.com/le_88_comptoir_du_cheveu/" target="_blank"><img src="{{ asset('images/logo/Insta.png') }}" alt="Instagram"></a>
                 
                 </section>
             </div>
         
         </footer>
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            <script>
+                let lampOn = "{{ asset('images/logo/lampe_allumee.png') }}";
+                let lampOff = "{{ asset('images/logo/lampe_eteinte.png') }}";
+            </script>
+        {% endblock %}
     </body>
 </html>
