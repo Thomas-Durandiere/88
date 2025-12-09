@@ -154,9 +154,12 @@ h2 {
 }
 
 
+/* --------------------------- Body RGPD/CGU ---------------------- */
 
-
-
+h4 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
 
 .texte {
     max-width: 60%;
@@ -167,4 +170,26 @@ h2 {
 }
 .texte p {
     margin-bottom: 20px;
+}
+
+
+/* --------------------------- Body prestations ---------------------- */
+
+.textePresta {
+    max-width: 60%;
+    margin: 50px auto;
+    text-align: left;
+    font-size: 1.2em;
+    font-family: "Montserrat";
+}
+.textePresta p {
+    margin-bottom: 20px;
+    font-size: 0.8em;
+}
+tr {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.td1 p {
+    color: darkgray;
 }
