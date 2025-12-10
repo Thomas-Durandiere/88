@@ -16,16 +16,35 @@
     background-color: #2B2B2B;
     color: white;
 }
+.dark table {
+    background-color: #444444;
+}
 
 
 
 /* --------------------------- Header ---------------------- */
 
 header {
+    background-image: url(../images/logo/Bois.jpeg);
+    padding-top: 50px;
+}
+#bandeau {
+    position: absolute; /* ou fixed si tu veux qu'il reste à l'écran en scrollant */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    text-shadow: -3px 2px 2px black;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: white;
+}
+#enTete {
     display: flex;
     justify-content: space-between;
-    background-image: url(../images/logo/Bois.jpeg);
-    background-size: 300px;
 }
 #navbar {
     display: flex;    
@@ -35,7 +54,7 @@ header {
     margin-right: 30px;
 }
 #logo {
-    max-width: 100px;
+    max-width: 150px;
     margin: 20px 0px 20px 40px;
 }
 
@@ -50,7 +69,7 @@ h1 {
 a {
     color: white;
     text-shadow: -3px 2px 2px black;
-    font-size: 25px;
+    font-size: 20px;
     text-decoration: none;
     margin-right: 10px;
     font-family: "Playfair Display";
@@ -60,7 +79,7 @@ a {
     margin-right: 30px;
 }
 #icon {
-    height: 47px;
+    height: 45px;
     margin: auto auto;
 }
 .bouton {
@@ -112,7 +131,7 @@ footer {
 }
 
 
-/* --------------------------- Body accueil ---------------------- */
+/* --------------------------- accueil ---------------------- */
 
 h2 {
     margin: 50px;
@@ -154,7 +173,7 @@ h2 {
 }
 
 
-/* --------------------------- Body RGPD/CGU ---------------------- */
+/* --------------------------- RGPD/CGU ---------------------- */
 
 h4 {
     margin-top: 30px;
@@ -173,7 +192,7 @@ h4 {
 }
 
 
-/* --------------------------- Body prestations ---------------------- */
+/* --------------------------- prestations ---------------------- */
 
 .textePresta {
     max-width: 60%;
@@ -192,4 +211,81 @@ tr {
 }
 .td1 p {
     color: darkgray;
+}
+table {
+    border-spacing: 40px;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    width: 100%;
+    table-layout: fixed;
+}
+.td1 {
+    width: 60%;
+}
+.td2 {
+    width: 15%;
+}
+.td3 {
+    width: 25%;
+}
+
+
+/* --------------------------- Photos ---------------------- */
+
+
+/* --------------------------- Boutique ---------------------- */
+
+
+
+/* --------------------------- Infos/Contact ---------------------- */
+
+.form-group {
+    display: flex;
+    flex-direction: column; /* label au-dessus de l'input */
+    margin-bottom: 15px;
+    max-width: 400px; /* largeur du formulaire */
+    margin-left: auto;
+    margin-right: auto; /* centre le formulaire */
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input, .area {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.area {
+    resize: vertical; /* permet de redimensionner verticalement */
+    min-height: 100px;
+}
+
+.bout {
+    background-color: white;
+    color: #2B2B2B;
+    padding: 10px 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: center;
+}
+
+.bout:hover {
+    background-color: #444;
+}
+
+
+/* --------------------------- Messages ---------------------- */
+
+
+.tableMess, .tableMess td {
+    border: 1px solid black;
+    padding: 5px;
 }
