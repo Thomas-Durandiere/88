@@ -16,7 +16,7 @@
     background-color: #2B2B2B;
     color: white;
 }
-.dark table {
+.dark table, .dark .contact, .dark .ICD {
     background-color: #444444;
 }
 
@@ -66,7 +66,7 @@ h1 {
     text-shadow: -3px 2px 2px black;
     font-size: 2.7em;
 }
-a {
+.lien {
     color: white;
     text-shadow: -3px 2px 2px black;
     font-size: 20px;
@@ -173,9 +173,13 @@ h2 {
 }
 
 .HP {
+    background-color: #f7f7f7;
+    font-family: "Montserrat";
     display: inline-block;
+    text-decoration: none;
     margin-left: 70%;
     margin-bottom: 40px;
+    padding: 10px;
     border: 1px solid black;
     border-radius: 10px;
 }
@@ -184,8 +188,8 @@ h2 {
 /* --------------------------- RGPD/CGU ---------------------- */
 
 h4 {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .texte {
@@ -247,14 +251,17 @@ table {
 
 
 /* --------------------------- Infos/Contact ---------------------- */
-
+#h2Infos {
+    font-size: 3em;
+}
+h3 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
 .form-group {
     display: flex;
-    flex-direction: column; /* label au-dessus de l'input */
+    flex-direction: column;
     margin-bottom: 15px;
-    max-width: 400px; /* largeur du formulaire */
-    margin-left: auto;
-    margin-right: auto; /* centre le formulaire */
 }
 
 .form-group label {
@@ -271,7 +278,7 @@ table {
 
 .area {
     resize: vertical; /* permet de redimensionner verticalement */
-    min-height: 100px;
+    min-height: 150px;
 }
 
 .bout {
@@ -289,11 +296,57 @@ table {
     background-color: #444;
 }
 
+.IC {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 70px auto;
+
+}
+.contact, .ICD {
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 30px;
+}
+.ICD {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+    width: 25%;
+
+}
+.contact {
+    width: 60%;
+
+}
+.avisGoogle {
+
+}
+.infos {
+
+}
+iframe {    
+  display: block;
+  margin: 40px auto;
+}
+#logoInfos {
+    max-width: 300px;
+    margin-bottom: 50px;
+}
+
 
 /* --------------------------- Messages ---------------------- */
 
 
-.tableMess, .tableMess td {
+.tableMess {
+    width: 80%;
+    margin: 50px auto;
+    border: 1px solid black;
+    padding: 5px;
+}
+.tableMess td {
     border: 1px solid black;
     padding: 5px;
 }

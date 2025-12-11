@@ -17,23 +17,23 @@
         <header>
             <div id="bandeau">
                 <p>Salon de coiffure mixte 1 Rue Florence Arthaud 17137 Nieul-sur-Mer</p>
-                <p>Horaires: du Lun au Ven: 9h-19h Sam: 9h-15h</p>
+                <p>Horaires: du Mar au Ven: 9h-19h Sam: 9h-15h</p>
             </div>  
             <div id="enTete">       
                 <a href="{{ path('app_accueil') }}"><img id="logo" src="{{ asset('images/logo/Logo-le88-fondAutour.png') }}" alt="Logo"></a>
                 <h1>Le 88 Comptoir du Cheveu</h1>
                 <div id="navbar">
                     <nav>
-                        <a href="{{ path('app_accueil') }}">Accueil</a>
-                        <a href="{{ path('app_prestations') }}">Prestation</a>
-                        <a href="{{ path('app_photos') }}">Photos</a>
-                        <a href="{{ path('app_boutique') }}">Boutique</a>
-                        <a href="{{ path('app_infos') }}">Infos/Contact</a>
+                        <a class="lien" href="{{ path('app_accueil') }}">Accueil</a>
+                        <a class="lien" href="{{ path('app_prestations') }}">Prestation</a>
+                        <a class="lien" href="{{ path('app_photos') }}">Photos</a>
+                        <a class="lien" href="{{ path('app_boutique') }}">Boutique</a>
+                        <a class="lien" href="{{ path('app_infos') }}">Infos/Contact</a>
                     </nav>  
                     <nav>          
-                        <a href="https://www.planity.com/le-88-comptoir-du-cheveu-17137-nieul-sur-mer" target="_blank"><img class="logoNavbar" src="{{ asset('images/logo/Reserver2.png') }}" alt="Réserver"></a>
-                        <a href=""><img class="logoNavbar" src="{{ asset('images/logo/Compte2.png') }}" alt="Connexion"></a>
-                        <a id="bouton" href=""><img id="icon" src="{{ asset('images/logo/lampe_allumee.png') }}" alt="jour/nuit" title="Jour/Nuit"></a>
+                        <a class="lien" href="https://www.planity.com/le-88-comptoir-du-cheveu-17137-nieul-sur-mer" target="_blank"><img class="logoNavbar" src="{{ asset('images/logo/Reserver2.png') }}" alt="Réserver"></a>
+                        <a class="lien" href=""><img class="logoNavbar" src="{{ asset('images/logo/Compte2.png') }}" alt="Connexion"></a>
+                        <a class="lien" id="bouton" href=""><img id="icon" src="{{ asset('images/logo/lampe_allumee.png') }}" alt="jour/nuit" title="Jour/Nuit"></a>
                     </nav>
                 </div>  
             </div>    
@@ -47,14 +47,14 @@
             <div id="footer">
                 <section id="mentions">
                     <p>@88ComptoireDuCheveu</p>
-                    <a href="{{ path('app_mentions') }}">Mentions légales</a>
-                    <a href="{{ path('app_cgu') }}">CGU</a>           
+                    <a class="lien" href="{{ path('app_mentions') }}">Mentions légales</a>
+                    <a class="lien" href="{{ path('app_cgu') }}">CGU</a>           
                 </section>
                 <section id="footContact">
-                    <a id="telLogo" href="tel:+33546073679"><img src="{{ asset('images/logo/Telephone.png') }}" alt="Téléphone"></a>
-                    <a id="tel" href="tel:+33546073679">05.46.07.36.79</a>
-                    <a href="https://www.facebook.com/le88comptoirducheveu" target="_blank"><img src="{{ asset('images/logo/FB.png') }}" alt="Facebook"></a>
-                    <a href="https://www.instagram.com/le_88_comptoir_du_cheveu/" target="_blank"><img src="{{ asset('images/logo/Insta.png') }}" alt="Instagram"></a>
+                    <a class="lien" id="telLogo" href="tel:+33546073679"><img src="{{ asset('images/logo/Telephone.png') }}" alt="Téléphone"></a>
+                    <a class="lien" id="tel" href="tel:+33546073679">05.46.07.36.79</a>
+                    <a class="lien" href="https://www.facebook.com/le88comptoirducheveu" target="_blank"><img src="{{ asset('images/logo/FB.png') }}" alt="Facebook"></a>
+                    <a class="lien" href="https://www.instagram.com/le_88_comptoir_du_cheveu/" target="_blank"><img src="{{ asset('images/logo/Insta.png') }}" alt="Instagram"></a>
                 
                 </section>
             </div>
