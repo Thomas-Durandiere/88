@@ -114,7 +114,26 @@ final class HomeController extends AbstractController
         return $this->render('messages.html.twig', [
             'messages' => $messages
         ]);
-}
+    }
 
-    
+    #[Route('/messages/delete/{index}', name: 'app_deleteMessage')]
+    public function deleteMessage(int $index): Response
+    {
+        $file = $this->getParameter('kernel.project_dir') . '/var/messages/contact.json';
+
+        if (!file_exists($file)) {
+            return $this->redirectToRoute('app_messages');
+        }
+
+        $messages = json_decode(file_get_contents($file), true);
+
+        // on supprime l’élément s’il existe
+        if (isset($messages[$index])) {
+            unset($messages[$index]);
+            $messages = array_values($messages); // réindexation
+            file_put_contents($file, json_encode($messages, JSON_PRETTY_PRINT));
+        }
+
+        return $this->redirectToRoute('app_messages');
+    }
 }

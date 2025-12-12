@@ -3,32 +3,34 @@
 {% block title %}Messages{% endblock %}
 
 {% block body %}
+    
+    <h2 id="h2Infos">Vos messages</h2>
 
 {% if messages is empty %}
-    <p>Aucun message pour le moment.</p>
+    <h3>Aucun message pour le moment</h3>
 {% else %}
-    <table class="tableMess">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Message</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for msg in messages %}
-                <tr>
-                    <td class="inputMess">{{ msg.nom }}</td>
-                    <td class="inputMess">{{ msg.prenom }}</td>
-                    <td class="inputMess">{{ msg.email }}</td>
-                    <td class="areaMess">{{ msg.message }}</td>
-                    <td class="inputMess">{{ msg.date }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+    <div class="divMess">
+        {% for msg in messages %}
+            <div class="card">                
+                <div class="div1">
+                    <span class="date">{{ msg.date }}</span>
+                    <span class="email"><a href="mailto:{{ msg.email }}" target="_blank">{{ msg.email }}</span>
+                    <a class="delete-btn" href="{{ path('app_deleteMessage', { index: loop.index0 }) }}" onclick="return confirm('Supprimer ce message ?');">✖</a>
+                </div>
+
+                <div class="div2">
+                    <span class="prenom">{{ msg.prenom }}</span>
+                    <span class="nom">{{ msg.nom }}</span>
+                </div>
+
+                <div class="div3">
+                    <p>Message: </p>{{ msg.message }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
 {% endif %}
 
     <a class="HP" href="#">Haut de page</a>
