@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    <main>
+
+        {% if app.user %}
+        <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion"></a>
+        {% else %} 
+        {% endif %}
+        
+        <h2>Connectez-vous</h2>
+
+        <form class="formLogin" method="post">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-3">
+                    Vous êtes déjà connecté en tant que {{ app.user.userIdentifier }}
+                </div>
+            {% endif %}
+            
+            <label for="username">Entrer votre email</label>
+            <input type="email" value="{{ last_username }}" name="_username" id="username" class="inputLog" autocomplete="email" required autofocus>
+            <label for="password">Entrer votre mot de passe</label>
+            <input type="password" name="_password" id="password" class="inputLog" autocomplete="current-password" required>
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+            {#
+                Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                See https://symfony.com/doc/current/security/remember_me.html
+
+                <div class="checkbox mb-3">
+                    <input type="checkbox" name="_remember_me" id="_remember_me">
+                    <label for="_remember_me">Remember me</label>
+                </div>
+            #}
+
+            <button class="bout" type="submit">
+                Envoyer
+            </button>
+            <p>Pas encore inscrit? Vous le pouvez en suivant le lien: <a id="lienInsc" href="{{ path('app_register') }}">Inscription</a></p>
+        </form>
+    </main>
+{% endblock %}

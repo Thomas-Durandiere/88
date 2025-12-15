@@ -59,6 +59,18 @@
             <p>Mardi au vendredi: 9h-19h</p>
             <p>Samedi: 9h-15</p>
         </div>
+        {% if weather %}
+            <div class="meteo">
+                <h3>Météo à Nieul-sur-Mer</h3>
+                <p> 🌡️ {{ weather.main.temp }} °C</p>
+                <p>☁️ {{ weather.weather[0].description|capitalize }}</p>
+                <p>💨 {{ weather.wind.speed }} km/h</p>                
+            </div>
+        {% else %}
+            <div>
+                <p>La météo est indisponible</p>
+            </div>
+        {% endif %}
     </div>
 </div>
     <div class="iframe">

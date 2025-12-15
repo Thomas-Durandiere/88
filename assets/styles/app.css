@@ -16,10 +16,10 @@
     background-color: #2B2B2B;
     color: white;
 }
-.dark table, .dark .contact, .dark .ICD, .dark .card {
+.dark table, .dark .contact, .dark .ICD, .dark .card, .dark .formLogin, .dark .formInsc {
     background-color: #444444;
 }
-.dark .divMess a {
+.dark .divMess a, .dark #lienInsc {
     color: white;
 }
 
@@ -131,6 +131,9 @@ footer {
 }
 #telLogo img {
     max-width: 30px;
+}
+#insta {
+    max-width: 40px;
 }
 
 
@@ -285,7 +288,6 @@ h3 {
     resize: vertical; /* permet de redimensionner verticalement */
     min-height: 150px;
 }
-
 .bout {
     background-color: white;
     color: #2B2B2B;
@@ -295,12 +297,9 @@ h3 {
     cursor: pointer;
     font-weight: bold;
     align-self: center;
+    margin-top: 30px;
+    margin-left: 80%;
 }
-
-.bout:hover {
-    background-color: #444;
-}
-
 .IC {
     display: flex;
     align-items: center;
@@ -360,7 +359,7 @@ iframe {
     margin-bottom: 20px;
     font-size: 1.2em;
 }
-.divMess a {
+.divMess a, #lienInsc {
     text-decoration: none;
     color: #2B2B2B;
 }
@@ -394,4 +393,66 @@ iframe {
 }
 .div3 {
     margin: 10px 0;
+}
+
+
+
+/* --------------------------- Inscription ---------------------- */
+
+.formInsc {
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 30px;
+    width: 70%;
+    margin: 70px auto;
+}
+.formInsc div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+.formInsc label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.checkBox {
+    display: block !important;
+}
+.checkBox input {
+    margin-left: 20px;
+}
+
+/* --------------------------- Connexion ---------------------- */
+
+.login {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.login main {
+    flex: 1;
+}
+.formLogin {
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 40%;
+    margin: 50px auto;
+    padding: 40px;
+    
+}
+.formLogin label {    
+    font-weight: bold;
+}
+.inputLog {    
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 60%;
 }

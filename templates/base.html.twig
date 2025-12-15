@@ -13,7 +13,7 @@
 
       
     </head>
-    <body class="light">
+    <body class="light {% if app.request.attributes.get('_route') == 'app_login' %}login{% endif %}">
         <header>
             <div id="bandeau">
                 <p>Salon de coiffure mixte 1 Rue Florence Arthaud 17137 Nieul-sur-Mer</p>
@@ -32,8 +32,8 @@
                     </nav>  
                     <nav>          
                         <a class="lien" href="https://www.planity.com/le-88-comptoir-du-cheveu-17137-nieul-sur-mer" target="_blank"><img class="logoNavbar" src="{{ asset('images/logo/Reserver2.png') }}" alt="Réserver"></a>
-                        <a class="lien" href=""><img class="logoNavbar" src="{{ asset('images/logo/Compte2.png') }}" alt="Connexion"></a>
-                        <a class="lien" id="bouton" href=""><img id="icon" src="{{ asset('images/logo/lampe_allumee.png') }}" alt="jour/nuit" title="Jour/Nuit"></a>
+                        <a class="lien" href="{{ path('app_login') }}"><img class="logoNavbar" src="{{ asset('images/logo/Compte2.png') }}" alt="Connexion"></a>
+                        <a class="lien" id="bouton" href=""><img id="icon" src="{{ asset('images/logo/journuit.png') }}" alt="jour/nuit" title="Jour/Nuit"></a>
                     </nav>
                 </div>  
             </div>    
@@ -54,7 +54,7 @@
                     <a class="lien" id="telLogo" href="tel:+33546073679"><img src="{{ asset('images/logo/Telephone.png') }}" alt="Téléphone"></a>
                     <a class="lien" id="tel" href="tel:+33546073679">05.46.07.36.79</a>
                     <a class="lien" href="https://www.facebook.com/le88comptoirducheveu" target="_blank"><img src="{{ asset('images/logo/FB.png') }}" alt="Facebook"></a>
-                    <a class="lien" href="https://www.instagram.com/le_88_comptoir_du_cheveu/" target="_blank"><img src="{{ asset('images/logo/Insta.png') }}" alt="Instagram"></a>
+                    <a class="lien" href="https://www.instagram.com/le_88_comptoir_du_cheveu/" target="_blank"><img id="insta" src="{{ asset('images/logo/Insta.png') }}" alt="Instagram"></a>
                 
                 </section>
             </div>
@@ -64,8 +64,8 @@
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
             <script>
-                let lampOn = "{{ asset('images/logo/lampe_allumee.png') }}";
-                let lampOff = "{{ asset('images/logo/lampe_eteinte.png') }}";
+                let lampOn = "{{ asset('images/logo/journuit.png') }}";
+                let lampOff = "{{ asset('images/logo/journuit.png') }}";
             </script>
         {% endblock %}
     </body>

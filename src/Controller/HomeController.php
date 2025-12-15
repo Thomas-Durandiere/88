@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\ContactType;
+use App\Service\Meteo;
 
 final class HomeController extends AbstractController
 {
@@ -59,7 +60,7 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/infos', name: 'app_infos')]
-    public function infos(Request $request): Response
+    public function infos(Request $request, Meteo $meteo): Response
     {
         $form = $this->createForm(ContactType::class, null, [
             'attr' => [
@@ -95,8 +96,16 @@ final class HomeController extends AbstractController
 
             return $this->redirectToRoute('app_infos');
         }
+
+        $weather = null;
+
+        try {
+            $weather = $meteo->getWeather('Nieul-sur-Mer');
+        } catch (\Throwable $e) {}
+
         return $this->render('infos.html.twig', [
             'form' => $form,
+            'weather' => $weather,
         ]);
     }
 
