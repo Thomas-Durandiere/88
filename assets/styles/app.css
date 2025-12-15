@@ -1,3 +1,458 @@
-body {
-    background-color: skyblue;
+*,
+::after,
+::before{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* --------------------------- Jour/Nuit ---------------------- */
+
+.light {
+    background-color: white;
+    color: #2B2B2B;
+}
+.dark, .dark .delete-btn {
+    background-color: #2B2B2B;
+    color: white;
+}
+.dark table, .dark .contact, .dark .ICD, .dark .card, .dark .formLogin, .dark .formInsc {
+    background-color: #444444;
+}
+.dark .divMess a, .dark #lienInsc {
+    color: white;
+}
+
+
+
+/* --------------------------- Header ---------------------- */
+
+header {
+    background-image: url(../images/logo/Bois.jpeg);
+    padding-top: 50px;
+}
+#bandeau {
+    position: absolute; /* ou fixed si tu veux qu'il reste à l'écran en scrollant */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    text-shadow: -3px 2px 2px black;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: white;
+}
+#enTete {
+    display: flex;
+    justify-content: space-between;
+}
+#navbar {
+    display: flex;    
+    align-items: center;
+    justify-content: flex-end;
+    gap: 40px;
+    margin-right: 30px;
+}
+#logo {
+    max-width: 150px;
+    margin: 20px 0px 20px 40px;
+}
+
+
+h1 {
+    margin: auto auto;
+    font-family: "Playfair Display";
+    color: white;
+    text-shadow: -3px 2px 2px black;
+    font-size: 2.7em;
+}
+.lien {
+    color: white;
+    text-shadow: -3px 2px 2px black;
+    font-size: 20px;
+    text-decoration: none;
+    margin-right: 10px;
+    font-family: "Playfair Display";
+}
+.logoNavbar {
+    max-width: 50px;
+    margin-right: 30px;
+}
+#icon {
+    height: 45px;
+    margin: auto auto;
+}
+.bouton {
+    max-width: 15px;
+    margin: auto auto;
+}
+
+
+
+/* --------------------------- Footer ---------------------- */
+
+footer {    
+    background-image: url(../images/logo/Bois.jpeg);
+}
+#footer {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;    
+    align-items: center;
+}
+#mentions {
+    display: flex;
+    margin-left: 30px;
+    gap: 20px;
+}
+#mentions p {
+    color: white;
+    text-shadow: -3px 2px 2px black;
+    font-family: "Playfair Display";
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+}
+#footContact {
+    display: flex;
+    margin-right: 30px;
+    gap: 20px;    
+    align-items: center;
+}
+#tel {    
+    margin-bottom: 10px;
+    font-size: 25px;
+}
+#telLogo{
+    display: none;
+}
+#telLogo img {
+    max-width: 30px;
+}
+#insta {
+    max-width: 40px;
+}
+
+
+/* --------------------------- accueil ---------------------- */
+
+h2 {
+    margin: 50px;
+    text-align: center;
+    font-family: "Playfair Display";
+    font-size: 1.7em;
+}
+
+.photoCouv {
+    min-width: 100%;
+    max-height: 600px;
+}
+.presentation {
+    max-width: 80%;
+    margin: 50px auto;
+    text-align: left;
+    font-size: 1.2em;
+    font-family: "Montserrat";
+}
+.accueil {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 100px;
+}
+.bloc {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    flex-direction: column;
+}
+.bloc p {
+    text-align: left;
+    margin: auto 30px;
+}
+.bloc img {
+    width: 100%;
+}
+
+.HP {
+    background-color: #f7f7f7;
+    font-family: "Montserrat";
+    display: inline-block;
+    text-decoration: none;
+    margin-left: 70%;
+    margin-bottom: 40px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+
+/* --------------------------- RGPD/CGU ---------------------- */
+
+h4 {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.texte {
+    max-width: 60%;
+    margin: 50px auto;
+    text-align: left;
+    font-size: 1.2em;
+    font-family: "Montserrat";
+}
+.texte p {
+    margin-bottom: 20px;
+}
+
+
+/* --------------------------- prestations ---------------------- */
+
+.textePresta {
+    max-width: 60%;
+    margin: 50px auto;
+    text-align: left;
+    font-size: 1.2em;
+    font-family: "Montserrat";
+}
+.textePresta p {
+    margin-bottom: 20px;
+    font-size: 0.8em;
+}
+tr {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.td1 p {
+    color: darkgray;
+}
+table {
+    border-spacing: 40px;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    width: 100%;
+    table-layout: fixed;
+}
+.td1 {
+    width: 60%;
+}
+.td2 {
+    width: 15%;
+}
+.td3 {
+    width: 25%;
+}
+
+
+/* --------------------------- Photos ---------------------- */
+
+
+/* --------------------------- Boutique ---------------------- */
+
+
+
+/* --------------------------- Infos/Contact ---------------------- */
+#h2Infos {
+    font-size: 2em;
+}
+h3 {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    text-align: left;
+    font-size: 1.5em;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input, .area {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.area {
+    resize: vertical; /* permet de redimensionner verticalement */
+    min-height: 150px;
+}
+.bout {
+    background-color: white;
+    color: #2B2B2B;
+    padding: 10px 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: center;
+    margin-top: 30px;
+    margin-left: 80%;
+}
+.IC {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 70px auto;
+
+}
+.contact, .ICD {
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 30px;
+}
+.ICD {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+    width: 25%;
+
+}
+.ICD p {
+    font-size: 1.2em;
+}
+.avisGoogle {
+    width: 100%;
+}
+.contact {
+    width: 60%;
+
+}
+iframe {    
+  display: block;
+  margin: 40px auto;
+}
+#logoInfos {
+    max-width: 300px;
+    margin-bottom: 50px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* --------------------------- Messages ---------------------- */
+
+
+.divMess {
+    width: 80%;
+    margin: 50px auto;
+}
+.divMess span {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+.divMess p {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+.divMess a, #lienInsc {
+    text-decoration: none;
+    color: #2B2B2B;
+}
+.card {    
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 30px 20px;
+    padding: 20px;
+    position: relative;
+}
+.delete-btn {
+    position: absolute;
+    text-decoration: none;    
+    cursor: pointer;
+    top: 5px;
+    right: 20px;
+    background-color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.div1, .div2 {
+    margin: 10px 0;
+    display: flex;
+    gap: 50px;
+}
+.div3 {
+    margin: 10px 0;
+}
+
+
+
+/* --------------------------- Inscription ---------------------- */
+
+.formInsc {
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 30px;
+    width: 70%;
+    margin: 70px auto;
+}
+.formInsc div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+.formInsc label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.checkBox {
+    display: block !important;
+}
+.checkBox input {
+    margin-left: 20px;
+}
+
+/* --------------------------- Connexion ---------------------- */
+
+.login {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.login main {
+    flex: 1;
+}
+.formLogin {
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 40%;
+    margin: 50px auto;
+    padding: 40px;
+    
+}
+.formLogin label {    
+    font-weight: bold;
+}
+.inputLog {    
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 60%;
 }

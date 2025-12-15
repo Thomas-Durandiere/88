@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Boutique{% endblock %}
+
+{% block body %}
+
+    {% if app.user %}
+        <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion"></a>
+        {% else %} 
+        {% endif %}
+    
+
+
+    
+    <a class="HP" href="#">Haut de page</a>
+    
+{% endblock %}
