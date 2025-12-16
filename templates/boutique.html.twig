@@ -4,9 +4,14 @@
 
 {% block body %}
 
-    {% if app.user %}
+    <h2 id="h2Infos">Boutique</h2>
+
+     {% if is_granted("ROLE_ADMIN") %}
         <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion"></a>
-        {% else %} 
+        <a class="boutAct" href="{{ path('app_ajouter')}}" >Ajouter</a>
+        <a class="boutAct" href="{{ path('app_messages')}}" >Messages</a>
+        {% elseif is_granted("ROLE_USER") %} 
+        <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion"></a>
         {% endif %}
 
     <div class="affArt">
@@ -20,23 +25,25 @@
                 <p>{{ product.price }} €</p>
                 <p>Quantité en stock: {{ product.stock }}</p>
             </div>
+
+            
+
             <div class="action">
 
-                    {# {% if is_granted("ROLE_USER") %} #}
-                {# <a href = "" type = "button" class="boutAct" > Ajouter </a>    #}
-
-                    {# {% if is_granted("ROLE_ADMIN") %} #}
-                <a href = "" type = "button" class="boutAct" > Modifier </a>
-                <a href = "" type = "button" class="boutAct" > Supprimer </a>
+                {% if is_granted("ROLE_ADMIN") %}
+                    <a href = "" type = "button" class="boutAct" > Modifier </a>
+                    <a href = "" type = "button" class="boutAct" > Supprimer </a>
+                    
+                {% elseif is_granted("ROLE_USER") %}
+                    <a href = "" type = "button" class="boutAct" > Ajouter </a>   
+                {% endif %}
 
                 {# {{ path('app_contact', {'id': product.id}) }} #}
 
             </div>
         </div>
-
-        
-
         {% endfor %}
+    
     </div>
 
 
