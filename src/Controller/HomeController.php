@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+
+use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\EntityManagementInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\ContactType;
 use App\Service\Meteo;
+use App\Form\ProductsType;
+use App\Entity\Products;
 
 final class HomeController extends AbstractController
 {
@@ -52,10 +57,33 @@ final class HomeController extends AbstractController
     }
     
     #[Route('/boutique', name: 'app_boutique')]
-    public function boutique(): Response
+    public function boutique(EntityManagerInterface $em)
     {
+        $repo = $em->getRepository(Products::class);
+        $product = $repo->findAll();
+
         return $this->render('boutique.html.twig', [
-            'controller_name' => 'HomeController',
+            'listProduct' => $product
+        ]);
+    }
+
+    #[Route('/ajouter', name: 'app_ajouter')]
+    public function ajouter(Request $request, EntityManagerInterface $em)
+    {
+        $product = new Products();
+
+        $form = $this->createForm(ProductsType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($product);
+            $em->flush();
+            $this->addFlash('success', 'Nouveau produit ajouté avec succès');
+
+            return $this->redirectToRoute('app_ajouter');
+        }
+        return $this->render('ajouter.html.twig', [
+            'form' => $form,
         ]);
     }
 

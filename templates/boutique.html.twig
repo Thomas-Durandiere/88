@@ -8,7 +8,36 @@
         <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion"></a>
         {% else %} 
         {% endif %}
+
+    <div class="affArt">
+        {% for product in listProduct %}
     
+        <div class="contener">
+            <div class="cardArt">
+                <h3> {{ product.name }} </h3>
+                <img src=" {{ product.pic }} ">
+                <p>{{ product.description }}</p>
+                <p>{{ product.price }} €</p>
+                <p>Quantité en stock: {{ product.stock }}</p>
+            </div>
+            <div class="action">
+
+                    {# {% if is_granted("ROLE_USER") %} #}
+                {# <a href = "" type = "button" class="boutAct" > Ajouter </a>    #}
+
+                    {# {% if is_granted("ROLE_ADMIN") %} #}
+                <a href = "" type = "button" class="boutAct" > Modifier </a>
+                <a href = "" type = "button" class="boutAct" > Supprimer </a>
+
+                {# {{ path('app_contact', {'id': product.id}) }} #}
+
+            </div>
+        </div>
+
+        
+
+        {% endfor %}
+    </div>
 
 
     

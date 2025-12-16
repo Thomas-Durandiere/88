@@ -16,7 +16,7 @@
     background-color: #2B2B2B;
     color: white;
 }
-.dark table, .dark .contact, .dark .ICD, .dark .card, .dark .formLogin, .dark .formInsc {
+.dark table, .dark .contact, .dark .ICD, .dark .card, .dark .formLogin, .dark .formInsc, .dark .contener {
     background-color: #444444;
 }
 .dark .divMess a, .dark #lienInsc {
@@ -139,6 +139,7 @@ footer {
 
 /* --------------------------- accueil ---------------------- */
 
+
 h2 {
     margin: 50px;
     text-align: center;
@@ -188,6 +189,9 @@ h2 {
     padding: 10px;
     border: 1px solid black;
     border-radius: 10px;
+}
+p {
+    font-family: "Montserrat";
 }
 
 
@@ -253,6 +257,52 @@ table {
 
 
 /* --------------------------- Boutique ---------------------- */
+
+.affArt {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    margin: 50px 50px;
+    height: 100%;
+}
+.contener {
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    gap: 30px;
+    padding: 20px;
+}
+.cardArt {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    gap: 30px;
+    padding: 20px;
+}
+.cardArt img {
+    max-width: 100px;
+}
+.action {
+    margin: 30px auto;
+}
+.boutAct { 
+    text-decoration: none;
+    background-color: white;
+    color: #2B2B2B;
+    padding: 10px 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: center;
+    margin: 20px;
+}
 
 
 
