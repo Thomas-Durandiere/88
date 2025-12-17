@@ -4,20 +4,34 @@
 
 {% block body %}
 
+     {% if is_granted("ROLE_ADMIN") %}
+        <div class="bandeauLog darkMode">
+            <a class="boutAct" href="{{ path('app_ajouter')}}" >Ajouter</a>
+            <a class="boutAct" href="{{ path('app_messages')}}" >Messages</a>
+            <a href="{{ path('app_logout')}}" ><img class="deco" id="iconDeco" src="{{ asset('images/logo/deco.png') }}" data-light="{{ asset('images/logo/deco.png') }}" 
+                data-dark="{{ asset('images/logo/decoB.png') }}" alt="Déconnexion" title="Déconnexion"></a>
+        </div>
+            {% elseif is_granted("ROLE_USER") %} 
+        <div class="bandeauLog darkMode">
+            <a class="boutAct" type="button" href="{{ path('app_panier')}}" >Panier</a>
+            <a href="{{ path('app_logout')}}" ><img class="deco" id="iconDeco" src="{{ asset('images/logo/deco.png') }}" data-light="{{ asset('images/logo/deco.png') }}" 
+                data-dark="{{ asset('images/logo/decoB.png') }}" alt="Déconnexion" title="Déconnexion"></a>
+        </div>
+        {% endif %}
+
     <h2 id="h2Infos">Boutique</h2>
 
-     {% if is_granted("ROLE_ADMIN") %}
-        <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion"></a>
-        <a class="boutAct" href="{{ path('app_ajouter')}}" >Ajouter</a>
-        <a class="boutAct" href="{{ path('app_messages')}}" >Messages</a>
-        {% elseif is_granted("ROLE_USER") %} 
-        <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion"></a>
-        {% endif %}
+    {% for msg in app.flashes('success') %}
+            <div class="alert darkMode">
+                <span>{{ msg }}</span>
+                <button class="delete-btn">✖</button>
+            </div>
+        {% endfor %}
 
     <div class="affArt">
         {% for product in listProduct %}
     
-        <div class="contener">
+        <div class="contener darkMode">
             <div class="cardArt">
                 <h3> {{ product.name }} </h3>
                 <img src=" {{ product.pic }} ">
@@ -31,11 +45,11 @@
             <div class="action">
 
                 {% if is_granted("ROLE_ADMIN") %}
-                    <a href = "" type = "button" class="boutAct" > Modifier </a>
-                    <a href = "" type = "button" class="boutAct" > Supprimer </a>
+                    <a href="{{ path('app_modif', {'id': product.id}) }}" type="button" class="boutAct" > Modifier </a>
+                    <a href="{{ path('app_delete', {'id': product.id}) }}" type="button" class="boutAct" > Supprimer </a>
                     
                 {% elseif is_granted("ROLE_USER") %}
-                    <a href = "" type = "button" class="boutAct" > Ajouter </a>   
+                    <a href="" type="button" class="boutAct" > Ajouter </a>   
                 {% endif %}
 
                 {# {{ path('app_contact', {'id': product.id}) }} #}

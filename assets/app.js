@@ -12,7 +12,7 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 // -------------- Jour/Nuit ----------------
 
 let bout = document.getElementById("bouton");
-let icon = document.getElementById("icon");
+let icon = document.getElementById("iconDeco");
 let mode = document.body;
 
 let save = localStorage.getItem("theme") || "light";
@@ -20,13 +20,32 @@ let save = localStorage.getItem("theme") || "light";
     mode.classList.remove("light", "dark");
     mode.classList.add(save);
 
+    icon.src = save === "dark" 
+    ? icon.dataset.dark 
+    : icon.dataset.light;
+
 bout.addEventListener("click", function(e) {
     e.preventDefault();
+
     let theme = mode.classList.contains("light") ? "dark" : "light";
 
     mode.classList.remove("light", "dark");
     mode.classList.add(theme);
+    
 
     localStorage.setItem("theme", theme);
+
+    icon.src = theme === "dark" ? icon.dataset.dark : icon.dataset.light;
+
 });
+
+document.querySelectorAll(".delete-btn").forEach(button => {
+    
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        button.closest(".alert").style.display = "none";
+    });
+});
+
 

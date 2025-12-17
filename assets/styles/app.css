@@ -16,7 +16,7 @@
     background-color: #2B2B2B;
     color: white;
 }
-.dark table, .dark .contact, .dark .ICD, .dark .card, .dark .formLogin, .dark .formInsc, .dark .contener, .dark .iframe {
+.dark table, .dark .darkMode {
     background-color: #444444;
 }
 .dark .divMess a, .dark #lienInsc {
@@ -256,6 +256,23 @@ table {
 
 /* --------------------------- Boutique ---------------------- */
 
+.alert {
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    height: 45px;
+    width: 20%;
+    margin-left: 30px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.alert span {
+    flex: 1;
+}
+
 .affArt {
     display: flex;
     flex-wrap: wrap;
@@ -299,10 +316,26 @@ table {
     cursor: pointer;
     font-weight: bold;
     align-self: center;
-    margin: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.bandeauLog {
+    background-color: #f7f7f7;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 50px;
+
+}
+.deco {
+    display: inline-block;
+    max-width: 50px;
+    margin-right: 100px;
 }
 
 
+/* --------------------------- Panier ---------------------- */
 
 /* --------------------------- Infos/Contact ---------------------- */
 #h2Infos {

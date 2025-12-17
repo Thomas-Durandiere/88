@@ -67,6 +67,14 @@ final class HomeController extends AbstractController
         ]);
     }
 
+    #[Route('/panier', name: 'app_panier')]
+    public function panier(): Response
+    {
+        return $this->render('panier.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
+
     #[Route('/ajouter', name: 'app_ajouter')]
     public function ajouter(Request $request, EntityManagerInterface $em)
     {
@@ -85,6 +93,44 @@ final class HomeController extends AbstractController
         return $this->render('ajouter.html.twig', [
             'form' => $form,
         ]);
+    }
+
+    #[route('/modif/{id}', name: 'app_modif')]
+    public function modif(Request $request, EntityManagerInterface $em, $id)
+    {
+        $p = $em->getRepository(Products::class)->find($id);
+
+        $form = $this->createForm(ProductsType::class, $p);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em->flush();
+            $this->addFlash(
+                'success',
+                'Article modifié avec succès'
+            );
+
+            return $this->redirectToRoute('app_boutique');
+        }
+        
+         return $this->render("modifier.html.twig", [
+            "form" => $form,
+        ]);
+    }
+
+    #[route('/delete/{id}', name: 'app_delete')]
+    public function delete(EntityManagerInterface $em, $id)
+    {
+        $p = $em->getRepository(Products::class)->find($id);
+        $em->remove($p);
+        $em->flush();
+        $this->addFlash(
+                'success',
+                'Article supprimé avec succès'
+            );
+
+        return $this->redirectToRoute('app_boutique');
     }
 
     #[Route('/infos', name: 'app_infos')]
@@ -173,4 +219,6 @@ final class HomeController extends AbstractController
 
         return $this->redirectToRoute('app_messages');
     }
+
+
 }
