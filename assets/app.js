@@ -19,7 +19,6 @@ let save = localStorage.getItem("theme") || "light";
  
     mode.classList.remove("light", "dark");
     mode.classList.add(save);
-    icon.src = save === "light" ? lampOn : lampOff;
 
 bout.addEventListener("click", function(e) {
     e.preventDefault();
@@ -27,8 +26,6 @@ bout.addEventListener("click", function(e) {
 
     mode.classList.remove("light", "dark");
     mode.classList.add(theme);
-
-    icon.src = theme === "light" ? lampOn : lampOff;
 
     localStorage.setItem("theme", theme);
 });
