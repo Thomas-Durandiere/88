@@ -9,7 +9,7 @@ import './styles/app.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
-// -------------- Jour/Nuit ----------------
+// ----------------------- Jour/Nuit -------------------------------
 
 let bout = document.getElementById("bouton");
 let icon = document.getElementById("iconDeco");
@@ -20,9 +20,11 @@ let save = localStorage.getItem("theme") || "light";
     mode.classList.remove("light", "dark");
     mode.classList.add(save);
 
-    icon.src = save === "dark" 
-    ? icon.dataset.dark 
-    : icon.dataset.light;
+    if (icon) {
+        icon.src = save === "dark" 
+        ? icon.dataset.dark 
+        : icon.dataset.light;
+    }
 
 bout.addEventListener("click", function(e) {
     e.preventDefault();
@@ -35,9 +37,19 @@ bout.addEventListener("click", function(e) {
 
     localStorage.setItem("theme", theme);
 
-    icon.src = theme === "dark" ? icon.dataset.dark : icon.dataset.light;
+    if (icon) {
+        icon.src = theme === "dark" 
+        ? icon.dataset.dark 
+        : icon.dataset.light;
+    }
 
 });
+
+
+
+// ----------------------- Jour/Nuit -------------------------------
+
+
 
 document.querySelectorAll(".delete-btn").forEach(button => {
     
