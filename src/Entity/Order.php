@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: '`order`')]
+#[ORM\Table(name: '`Order`')]
 class Order
 {
     #[ORM\Id]
@@ -25,7 +25,7 @@ class Order
     #[ORM\Column]
     private ?int $total_price = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\ManyToOne(inversedBy: 'Orders')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
@@ -35,12 +35,12 @@ class Order
     /**
      * @var Collection<int, OrderProducts>
      */
-    #[ORM\OneToMany(targetEntity: OrderProducts::class, mappedBy: 'orderRef', orphanRemoval: true)]
-    private Collection $orderProducts;
+    #[ORM\OneToMany(targetEntity: OrderProducts::class, mappedBy: 'OrderRef', orphanRemoval: true)]
+    private Collection $OrderProducts;
 
     public function __construct()
     {
-        $this->orderProducts = new ArrayCollection();
+        $this->OrderProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,25 +113,25 @@ class Order
      */
     public function getOrderProducts(): Collection
     {
-        return $this->orderProducts;
+        return $this->OrderProducts;
     }
 
-    public function addOrderProduct(OrderProducts $orderProduct): static
+    public function addOrderProduct(OrderProducts $OrderProduct): static
     {
-        if (!$this->orderProducts->contains($orderProduct)) {
-            $this->orderProducts->add($orderProduct);
-            $orderProduct->setOrderRef($this);
+        if (!$this->OrderProducts->contains($OrderProduct)) {
+            $this->OrderProducts->add($OrderProduct);
+            $OrderProduct->setOrderRef($this);
         }
 
         return $this;
     }
 
-    public function removeOrderProduct(OrderProducts $orderProduct): static
+    public function removeOrderProduct(OrderProducts $OrderProduct): static
     {
-        if ($this->orderProducts->removeElement($orderProduct)) {
+        if ($this->OrderProducts->removeElement($OrderProduct)) {
             // set the owning side to null (unless already changed)
-            if ($orderProduct->getOrderRef() === $this) {
-                $orderProduct->setOrderRef(null);
+            if ($OrderProduct->getOrderRef() === $this) {
+                $OrderProduct->setOrderRef(null);
             }
         }
 

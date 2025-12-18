@@ -20,13 +20,13 @@ class OrderProducts
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price_unit = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orderProducts')]
+    #[ORM\ManyToOne(inversedBy: 'OrderProducts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?order $orderRef = null;
+    private ?Order $OrderRef = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orderProducts')]
+    #[ORM\ManyToOne(inversedBy: 'OrderProducts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?products $products = null;
+    private ?Products $Products = null;
 
     public function getId(): ?int
     {
@@ -57,26 +57,26 @@ class OrderProducts
         return $this;
     }
 
-    public function getOrderRef(): ?order
+    public function getOrderRef(): ?Order
     {
-        return $this->orderRef;
+        return $this->OrderRef;
     }
 
-    public function setOrderRef(?order $orderRef): static
+    public function setOrderRef(?Order $OrderRef): static
     {
-        $this->orderRef = $orderRef;
+        $this->OrderRef = $OrderRef;
 
         return $this;
     }
 
-    public function getProducts(): ?products
+    public function getProducts(): ?Products
     {
-        return $this->products;
+        return $this->Products;
     }
 
-    public function setProducts(?products $products): static
+    public function setProducts(?Products $Products): static
     {
-        $this->products = $products;
+        $this->Products = $Products;
 
         return $this;
     }
