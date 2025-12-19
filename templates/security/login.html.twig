@@ -5,14 +5,24 @@
 {% block body %}
     <main>
 
-        {% if app.user %}
-        <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion"></a>
-        {% else %} 
+        {% if is_granted("ROLE_ADMIN") %}
+        <div class="bandeauLog darkMode">
+            <a class="boutAct" href="{{ path('app_ajouter')}}" >Ajouter</a>
+            <a class="boutAct" href="{{ path('app_messages')}}" >Messages</a>
+            <a href="{{ path('app_logout')}}" ><img class="deco" id="iconDeco" src="{{ asset('images/logo/deco.png') }}" data-light="{{ asset('images/logo/deco.png') }}" 
+                data-dark="{{ asset('images/logo/decoB.png') }}" alt="Déconnexion" title="Déconnexion"></a>
+        </div>
+            {% elseif is_granted("ROLE_USER") %} 
+        <div class="bandeauLog darkMode">
+            <a class="boutAct" type="button" href="{{ path('app_panier')}}" >Panier</a>
+            <a href="{{ path('app_logout')}}" ><img class="deco" id="iconDeco" src="{{ asset('images/logo/deco.png') }}" data-light="{{ asset('images/logo/deco.png') }}" 
+                data-dark="{{ asset('images/logo/decoB.png') }}" alt="Déconnexion" title="Déconnexion"></a>
+        </div>
         {% endif %}
         
-        <h2>Connectez-vous</h2>
+        <h2 id="h2Infos">Connectez-vous</h2>
 
-        <form class="formLogin" method="post">
+        <form class="formLogin darkMode" method="post">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
@@ -42,7 +52,7 @@
             <button class="bout" type="submit">
                 Envoyer
             </button>
-            <p>Pas encore inscrit? Vous le pouvez en suivant le lien: <a id="lienInsc" href="{{ path('app_register') }}">Inscription</a></p>
+            <p>Pas encore inscrit? Vous le pouvez en suivant ce lien: <a id="lienInsc" href="{{ path('app_register') }}">Inscription</a></p>
         </form>
     </main>
 {% endblock %}

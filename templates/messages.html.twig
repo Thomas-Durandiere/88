@@ -12,11 +12,11 @@
 
     <div class="divMess">
         {% for msg in messages %}
-            <div class="card">                
+            <div class="card darkMode">                
                 <div class="div1">
                     <span class="date">{{ msg.date }}</span>
                     <span class="email"><a href="mailto:{{ msg.email }}" target="_blank">{{ msg.email }}</span>
-                    <a class="delete-btn" href="{{ path('app_deleteMessage', { index: loop.index0 }) }}" onclick="return confirm('Supprimer ce message ?');">✖</a>
+                    <a class="deleteMess" href="{{ path('app_deleteMessage', { index: loop.index0 }) }}" onclick="return confirm('Supprimer ce message ?');">✖</a>
                 </div>
 
                 <div class="div2">

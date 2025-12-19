@@ -63,10 +63,7 @@
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
-            <script>
-                let lampOn = "{{ asset('images/logo/journuit.png') }}";
-                let lampOff = "{{ asset('images/logo/journuit.png') }}";
-            </script>
+            
         {% endblock %}
     </body>
 </html>

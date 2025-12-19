@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Boutique{% endblock %}
+{% block title %}Modifier{% endblock %}
 
 {% block body %}
 
@@ -18,47 +18,28 @@
                 data-dark="{{ asset('images/logo/decoB.png') }}" alt="Déconnexion" title="Déconnexion"></a>
         </div>
         {% endif %}
+        
 
-    <h2 id="h2Infos">Boutique</h2>
+    <h2 id="h2Infos">Modifier</h2>
 
-    {% for msg in app.flashes('success') %}
+        {% for msg in app.flashes('success') %}
             <div class="alert darkMode">
                 <span>{{ msg }}</span>
                 <button class="delete-btn">✖</button>
             </div>
         {% endfor %}
 
-    <div class="affArt">
-        {% for product in listProduct %}
+
+    {{ form_start(form, {'attr': {'class': 'formInsc darkMode'}}) }}
     
-        <div class="contener darkMode">
-            <div class="cardArt">
-                <h3> {{ product.name }} </h3>
-                <img src=" {{ product.pic }} ">
-                <p>{{ product.description }}</p>
-                <p>{{ product.price }} €</p>
-                <p>Quantité en stock: {{ product.stock }}</p>
-            </div>
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.pic) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.stock) }}
+        <input type="submit" class="bout" value="Modifier">
 
-            
-
-            <div class="action">
-
-                {% if is_granted("ROLE_ADMIN") %}
-                    <a href="{{ path('app_modif', {'id': product.id}) }}" type="button" class="boutAct" > Modifier </a>
-                    <a href="{{ path('app_delete', {'id': product.id}) }}" type="button" class="boutAct" > Supprimer </a>
-                    
-                {% elseif is_granted("ROLE_USER") %}
-                    <a href="{{ path('app_panierAdd', {'id': product.id}) }}" type="button" class="boutAct" > Ajouter </a>   
-                {% endif %}
-
-                {# {{ path('app_contact', {'id': product.id}) }} #}
-
-            </div>
-        </div>
-        {% endfor %}
-    
-    </div>
+    {{ form_end(form) }}
 
 
     

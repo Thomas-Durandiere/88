@@ -2,12 +2,19 @@
 
 namespace App\Controller;
 
+
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\ContactType;
 use App\Service\Meteo;
+use App\Form\ProductsType;
+use App\Entity\Products;
+use App\Entity\Order;
+use App\Entity\OrderProducts;
+use App\Repository\OrderRepository;
 
 final class HomeController extends AbstractController
 {
@@ -51,13 +58,156 @@ final class HomeController extends AbstractController
         ]);
     }
     
+
+    /* ------------------------------------ Boutique ------------------------------------ */
+
+
+
     #[Route('/boutique', name: 'app_boutique')]
-    public function boutique(): Response
+    public function boutique(EntityManagerInterface $em)
     {
+        $repo = $em->getRepository(Products::class);
+        $product = $repo->findAll();
+
         return $this->render('boutique.html.twig', [
+            'listProduct' => $product
+        ]);
+    }
+
+    #[Route('/ajouter', name: 'app_ajouter')]
+    public function ajouter(Request $request, EntityManagerInterface $em)
+    {
+        $product = new Products();
+
+        $form = $this->createForm(ProductsType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($product);
+            $em->flush();
+            $this->addFlash('success', 'Nouveau produit ajouté avec succès');
+
+            return $this->redirectToRoute('app_ajouter');
+        }
+        return $this->render('ajouter.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    #[route('/modif/{id}', name: 'app_modif')]
+    public function modif(Request $request, EntityManagerInterface $em, $id)
+    {
+        $p = $em->getRepository(Products::class)->find($id);
+
+        $form = $this->createForm(ProductsType::class, $p);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em->flush();
+            $this->addFlash(
+                'success',
+                'Article modifié avec succès'
+            );
+
+            return $this->redirectToRoute('app_boutique');
+        }
+        
+         return $this->render("modifier.html.twig", [
+            "form" => $form,
+        ]);
+    }
+
+    #[route('/delete/{id}', name: 'app_delete')]
+    public function delete(EntityManagerInterface $em, $id)
+    {
+        $p = $em->getRepository(Products::class)->find($id);
+        $em->remove($p);
+        $em->flush();
+        $this->addFlash(
+                'success',
+                'Article supprimé avec succès'
+            );
+
+        return $this->redirectToRoute('app_boutique');
+    }
+
+    /* ------------------------------------ Panier ------------------------------------ */
+
+    
+    #[Route('/panier', name: 'app_panier')]
+    public function panier(): Response
+    {
+        return $this->render('panier.html.twig', [
             'controller_name' => 'HomeController',
         ]);
     }
+
+    #[Route('/panier/add/{id}', name: 'app_panierAdd')]
+    public function panierAdd(Products $p, OrderRepository $or, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+
+        // 1️⃣ Récupérer le panier ou créer
+        $order = $or->findCartByUser($user);
+
+        if (!$order) {
+            $order = new Order();
+            $order->setUser($user);
+            $order->setStatus('cart');
+            $order->setDate(new \DateTimeImmutable());
+            $order->setTotalQuantity(0);
+            $order->setTotalPrice(0);
+            $em->persist($order);
+        }
+
+        // 2️⃣ Chercher si le produit est déjà dans le panier
+        $found = false;
+        foreach ($order->getOrderProducts() as $op) {
+            if ($op->getProducts() === $p) {
+                $op->setQuantity($op->getQuantity() + 1);
+                $found = true;
+                break;
+            }
+        }
+
+        // 3️⃣ Sinon créer la ligne dans OrderProducts
+        if (!$found) {
+            $op = new OrderProducts();
+            $op->setOrderRef($order); // lien vers Order
+            $op->setProducts($p);     // lien vers Product
+            $op->setQuantity(1);
+            $op->setPriceUnit($p->getPrice());
+            $em->persist($op);
+            $order->addOrderProduct($op); // ajoute aussi dans la collection
+        }
+
+        // 4️⃣ Mettre à jour totals
+        $totalQuantity = 0;
+        $totalPrice = "0.00";
+        foreach ($order->getOrderProducts() as $op) {
+            $quantity = (string)$op->getQuantity();
+            $priceUnit = (string)$op->getPriceUnit(); // ⚠️ utiliser price_unit
+            $lineTotal = bcmul($priceUnit, $quantity, 2);
+            $totalPrice = bcadd($totalPrice, $lineTotal, 2);
+            $totalQuantity += $op->getQuantity();
+        }
+        $order->setTotalQuantity($totalQuantity);
+        $order->setTotalPrice($totalPrice);
+
+        // 5️⃣ Flush
+        $em->flush();
+
+        // 6️⃣ Rediriger vers boutique
+        return $this->redirectToRoute('app_boutique');
+    }   
+    
+
+
+
+    /* ------------------------------------ Infos/Contact ------------------------------------ */
+
+
 
     #[Route('/infos', name: 'app_infos')]
     public function infos(Request $request, Meteo $meteo): Response
@@ -145,4 +295,6 @@ final class HomeController extends AbstractController
 
         return $this->redirectToRoute('app_messages');
     }
+
+
 }
