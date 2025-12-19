@@ -12,7 +12,7 @@
     background-color: white;
     color: #2B2B2B;
 }
-.dark, .dark .delete-btn {
+.dark, .dark .delete-btn, .dark .deleteMess {
     background-color: #2B2B2B;
     color: white;
 }
@@ -458,7 +458,7 @@ iframe {
     padding: 20px;
     position: relative;
 }
-.delete-btn {
+.delete-btn, .deleteMess {
     position: absolute;
     text-decoration: none;    
     cursor: pointer;

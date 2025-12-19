@@ -6,6 +6,8 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`Order`')]
@@ -22,8 +24,8 @@ class Order
     #[ORM\Column]
     private ?int $total_quantity = null;
 
-    #[ORM\Column]
-    private ?int $total_price = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $total_price = null;
 
     #[ORM\ManyToOne(inversedBy: 'Orders')]
     #[ORM\JoinColumn(nullable: false)]
@@ -72,12 +74,12 @@ class Order
         return $this;
     }
 
-    public function getTotalPrice(): ?int
+    public function getTotalPrice(): ?string
     {
         return $this->total_price;
     }
 
-    public function setTotalPrice(int $total_price): static
+    public function setTotalPrice(string $total_price): static
     {
         $this->total_price = $total_price;
 

@@ -16,6 +16,23 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
+
+    public function findCartByUser($user): ?Order
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.user = :user')
+            ->andWhere('o.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', 'cart')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
+
+
+
+
     //    /**
     //     * @return Order[] Returns an array of Order objects
     //     */

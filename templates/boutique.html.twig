@@ -49,7 +49,7 @@
                     <a href="{{ path('app_delete', {'id': product.id}) }}" type="button" class="boutAct" > Supprimer </a>
                     
                 {% elseif is_granted("ROLE_USER") %}
-                    <a href="" type="button" class="boutAct" > Ajouter </a>   
+                    <a href="{{ path('app_panierAdd', {'id': product.id}) }}" type="button" class="boutAct" > Ajouter </a>   
                 {% endif %}
 
                 {# {{ path('app_contact', {'id': product.id}) }} #}

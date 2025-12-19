@@ -4,11 +4,17 @@
 
 {% block body %}
 
-{% for msg in app.flashes('success') %}
-    <div class="alert alert-success">{{ msg }}</div>
-{% endfor %}
+
 
 <h2 id="h2Infos">Infos et Contact</h2>
+
+{% for msg in app.flashes('success') %}
+            <div class="alert darkMode">
+                <span>{{ msg }}</span>
+                <button class="delete-btn">✖</button>
+            </div>
+        {% endfor %}
+        
 
 <div class="IC">
     <div class="contact darkMode">
