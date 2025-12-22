@@ -21,9 +21,35 @@
         
 
     <h2 id="h2Infos">Panier</h2>
-    
 
+    <div class="affPanier">        
+        
+        <div class="panier">
+            {% for op in panier.getOrderProducts %}
+        
+            <div class="panierArt darkMode">
+                <div class="cardPanier">
+                    <img src="{{ op.getProducts.pic }}">
+                    <h3>{{ op.getProducts.name }}</h3>
+                    <p>{{ op.getPriceUnit }} €</p>
+                    <button class="quantitySup" data-op-id="{{ op.id }}">🗑️</button>
+                    <button class="quantity-" data-op-id="{{ op.id }}">-</button>
+                    <span>{{ op.getQuantity }}</span>
+                    <button class="quantity+" data-op-id="{{ op.id }}">+</button>
+                    <p>{{ (op.getQuantity * op.getPriceUnit)|number_format(2, '.', ',') }} €</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
+        <div class="recap darkMode">
+            <h3>Récapiculatif</h3>
+            <p>Total nombre d'articles{{ panier.totalQuantity }}</p>
+            <p>Prix total: {{ panier.totalPrice }} €</p>
+            <button class="paye">Payer</button>
+        </div>   
+
+    </div>
     
     <a class="HP" href="#">Haut de page</a>
     

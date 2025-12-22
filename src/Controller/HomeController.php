@@ -136,10 +136,14 @@ final class HomeController extends AbstractController
 
     
     #[Route('/panier', name: 'app_panier')]
-    public function panier(): Response
+    public function panier(OrderRepository $or): Response
     {
+
+        $user = $this->getUser();
+        $panier = $or->findCartByUser($user);
+
         return $this->render('panier.html.twig', [
-            'controller_name' => 'HomeController',
+            'panier' => $panier,
         ]);
     }
 
