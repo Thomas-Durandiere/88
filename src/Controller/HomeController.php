@@ -15,6 +15,7 @@ use App\Entity\Products;
 use App\Entity\Order;
 use App\Entity\OrderProducts;
 use App\Repository\OrderRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class HomeController extends AbstractController
 {
@@ -206,6 +207,72 @@ final class HomeController extends AbstractController
         return $this->redirectToRoute('app_boutique');
     }   
     
+
+    #[Route('/panier/update/{id}', name: 'panier_update', methods: ['POST'])]
+    public function update(OrderProducts $op, Request $r, EntityManagerInterface $em): JsonResponse
+    {
+        $action = $r->request->get('action');
+        $order =$op->getOrderRef();
+
+        $removeLine = false;
+
+        if ($action === 'increase') {
+            $op->setQuantity($op->getQuantity() + 1);
+        } elseif ($action === 'decrease') {            
+            if ($op->getQuantity() > 1) {
+                $op->setQuantity($op->getQuantity() - 1);
+            } else {
+                $removeLine = true;
+                $em->remove($op);
+            }
+        } elseif ($action === 'remove') {
+            $removeLine = true;
+            $em->remove($op);
+        }
+
+        $em->flush();
+
+        // Mettre à jour totals
+        $totalQuantity = 0;
+        $totalPrice = "0.00";
+        foreach ($order->getOrderProducts() as $line) {
+            $quantity = (string)$line->getQuantity();
+            $priceUnit = (string)$line->getPriceUnit();
+            $lineTotal = bcmul($priceUnit, $quantity, 2);
+            $totalPrice = bcadd($totalPrice, $lineTotal, 2);
+            $totalQuantity += (int)$quantity;
+        }
+        $order->setTotalQuantity($totalQuantity);
+        $order->setTotalPrice($totalPrice);
+
+        $em->flush();
+
+        
+
+    
+        
+
+        // Vérifier si le panier est vide
+        if ($order->getOrderProducts()->isEmpty()) {
+            $em->remove($order);
+            $em->flush();
+        
+            return $this->json([
+                'quantity' => 0,
+                'lineTotal' => '0.00',
+                'totalQuantity' => 0,
+                'totalPrice' => '0.00'
+            ]);
+        }
+
+
+        return $this->json([
+            'quantity' => $removeLine ? 0 : $op->getQuantity(),
+            'lineTotal' => $removeLine ? '0.00' : number_format((float)$op->getQuantity() * (float)$op->getPriceUnit(), 2, '.', ','),
+            'totalQuantity' => $order->getTotalQuantity(),
+            'totalPrice' => number_format($order->getTotalPrice(), 2, '.', ',')
+        ]);
+    }
 
 
 

@@ -61,3 +61,41 @@ document.querySelectorAll(".delete-btn").forEach(button => {
 });
 
 
+// ----------------------- Bouton +/- panier -------------------------------
+
+
+
+document.querySelectorAll('.quantityM, .quantityP, .quantitySup').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+        const parent = btn.closest('.panierArt');
+        const opId = parent.dataset.opId;
+        let action = '';
+
+        if (btn.classList.contains('quantityP')) action = 'increase';
+        else if (btn.classList.contains('quantityM')) action = 'decrease';
+        else if (btn.classList.contains('quantitySup')) action = 'remove';
+
+        const formData = new FormData();
+        formData.append('action', action);
+
+        const response = await fetch(`/panier/update/${opId}`, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        const data = await response.json();
+
+
+        if (action === 'remove' || data.quantity === 0) {
+            parent.remove();
+        } else {
+            parent.querySelector('.quantity').textContent = data.quantity;
+            parent.querySelector('.line-total').textContent = data.lineTotal + ' €';
+        }
+
+        // Mettre à jour le récap
+        document.querySelector('.recap .total-quantity').textContent = data.totalQuantity;
+        document.querySelector('.recap .total-price').textContent = data.totalPrice + ' €';
+    });
+});
