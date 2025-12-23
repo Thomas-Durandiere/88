@@ -16,6 +16,10 @@ use App\Entity\Order;
 use App\Entity\OrderProducts;
 use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Stripe\StripeClient;
+use Stripe\Checkout\Session;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 
 final class HomeController extends AbstractController
 {
@@ -272,6 +276,53 @@ final class HomeController extends AbstractController
             'totalQuantity' => $order->getTotalQuantity(),
             'totalPrice' => number_format($order->getTotalPrice(), 2, '.', ',')
         ]);
+    }
+
+
+    /* ------------------------------------ Paiement ------------------------------------ */
+
+    
+
+    #[Route('/panier/create-session', name: 'app_create_stripe_session', methods: ['POST'])]
+    public function createStripeSession(OrderRepository $or): JsonResponse
+    {
+        $user = $this->getUser();
+        $panier = $or->findCartByUser($user);
+
+        $stripe = new StripeClient($_ENV['STRIPE_SECRET_KEY']);
+
+        $session = $stripe->checkout->sessions->create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => (int) bcmul($panier->getTotalPrice(), '100'),
+                    'product_data' => [
+                        'name' => 'Commande numéro:' . $panier->getId(),
+                        'description' => 'Commande sécurisé par carte bancaire',
+                    ],
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => $this->generateUrl('app_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url' => $this->generateUrl('app_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+
+        ]);
+
+        return $this->json(['id' => $session->id]);
+    }
+
+    #[Route('/panier/success', name: 'app_success')]
+    public function success(): Response
+    {
+        return $this->render('success.html.twig');
+    }
+
+    #[Route('/panier/cancel', name: 'app_cancel')]
+    public function cancel(): Response
+    {
+        return $this->redirectToRoute('app_panier');
     }
 
 
