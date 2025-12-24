@@ -229,9 +229,6 @@ tr {
     padding-top: 20px;
     padding-bottom: 20px;
 }
-.td1 p {
-    color: darkgray;
-}
 table {
     border-spacing: 40px;
     border: 1px solid black;
@@ -333,7 +330,9 @@ table {
     max-width: 50px;
     margin-right: 100px;
 }
-
+#products_description {
+    height: 100px;
+}
 
 /* --------------------------- Panier ---------------------- */
 
