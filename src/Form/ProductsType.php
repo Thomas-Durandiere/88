@@ -37,10 +37,6 @@ class ProductsType extends AbstractType
                 'label' => 'Stock',
                 'attr' => ['class' => 'input']
                 ])
-            // ->add('save', SubmitType::class, [
-            // 'label' => 'Ajouter',
-            // 'attr' => ['class' => 'bout']
-            //     ])
         ;
     }
 

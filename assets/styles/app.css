@@ -22,6 +22,9 @@
 .dark .divMess a, .dark #lienInsc {
     color: white;
 }
+.dark .history {
+    background-color: #333333 ;
+}
 
 
 
@@ -229,9 +232,6 @@ tr {
     padding-top: 20px;
     padding-bottom: 20px;
 }
-.td1 p {
-    color: darkgray;
-}
 table {
     border-spacing: 40px;
     border: 1px solid black;
@@ -333,9 +333,86 @@ table {
     max-width: 50px;
     margin-right: 100px;
 }
-
+#products_description {
+    height: 100px;
+}
 
 /* --------------------------- Panier ---------------------- */
+
+
+.affPanier {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+    gap: 50px;
+    margin: 150px 50px;
+    height: 100%;
+}
+.panier {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.panierArt {
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    gap: 30px;
+    padding: 20px;
+}
+.cardPanier {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    width: 100%;
+}
+.cardPanier img {
+    max-width: 80px;
+}
+.recap {
+    position: sticky;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+}
+.addressForm {
+    margin-top: 30px;
+    width: 60%;
+}
+.h3Livr {
+    margin-top: 40px;
+    font-size: 1.1em;
+}
+.paye {
+    background-color: #2F80ED;
+    color: #FFFFFF;
+    display: block;
+    width: 80%;
+    margin: 50px auto 30px auto;
+    height: 50px;
+    cursor: pointer;
+}
+
+
+/* --------------------------- Historique ---------------------- */
+
+.affHist {
+    margin-bottom: 50px;
+}
+.history {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 30px;
+    background-color: #FAFAFA;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    width: 70%;
+    margin: 100px auto;
+}
 
 /* --------------------------- Infos/Contact ---------------------- */
 #h2Infos {

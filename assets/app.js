@@ -61,3 +61,76 @@ document.querySelectorAll(".delete-btn").forEach(button => {
 });
 
 
+// ----------------------- Bouton +/- panier -------------------------------
+
+
+
+document.querySelectorAll('.quantityM, .quantityP, .quantitySup').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+        const parent = btn.closest('.panierArt');
+        const opId = parent.dataset.opId;
+        let action = '';
+
+        if (btn.classList.contains('quantityP')) action = 'increase';
+        else if (btn.classList.contains('quantityM')) action = 'decrease';
+        else if (btn.classList.contains('quantitySup')) action = 'remove';
+
+        const formData = new FormData();
+        formData.append('action', action);
+
+        const response = await fetch(`/panier/update/${opId}`, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        const data = await response.json();
+
+
+        if (action === 'remove' || data.quantity === 0) {
+            parent.remove();
+        } else {
+            parent.querySelector('.quantity').textContent = data.quantity;
+            parent.querySelector('.line-total').textContent = data.lineTotal + ' €';
+        }
+
+        // Mettre à jour le récap
+        document.querySelector('.recap .total-quantity').textContent = data.totalQuantity;
+        document.querySelector('.recap .total-price').textContent = data.totalPrice + ' €';
+    });
+});
+
+
+// ----------------------- Payer -------------------------------
+
+
+
+// Assure-toi que Stripe.js est chargé
+// <script src="https://js.stripe.com/v3/"></script>
+
+const stripe = Stripe('pk_test_51Sh819LYNBUdrngnXI0fpgGTc3Q1TWQkvNbFGVKowrFmueJe1DFMq35zuf1I3GFJ37Rrwhnd98nqhOrlqTothtuv00URg6FM7l');
+
+document.querySelector('.paye').addEventListener('click', async () => {
+    try {
+        // Crée la session côté serveur
+        const response = await fetch('/panier/create-session', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        const data = await response.json();
+
+        // Redirige vers Stripe Checkout
+        const result = await stripe.redirectToCheckout({
+            sessionId: data.id
+        });
+
+        if (result.error) {
+            // Affiche l'erreur s'il y en a
+            alert(result.error.message);
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Erreur lors de la création de la session Stripe.');
+    }
+});

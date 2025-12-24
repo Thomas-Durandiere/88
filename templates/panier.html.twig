@@ -14,6 +14,7 @@
             {% elseif is_granted("ROLE_USER") %} 
         <div class="bandeauLog darkMode">
             <a class="boutAct" type="button" href="{{ path('app_panier')}}" >Panier</a>
+            <a class="boutAct" type="button" href="{{ path('app_history')}}" >Historique</a>
             <a href="{{ path('app_logout')}}" ><img class="deco" id="iconDeco" src="{{ asset('images/logo/deco.png') }}" data-light="{{ asset('images/logo/deco.png') }}" 
                 data-dark="{{ asset('images/logo/decoB.png') }}" alt="Déconnexion" title="Déconnexion"></a>
         </div>
@@ -21,10 +22,65 @@
         
 
     <h2 id="h2Infos">Panier</h2>
-    
 
+    <div class="affPanier">        
 
+        {% if panier is not null and panier.getOrderProducts is not empty %}
+        
+            <div class="panier">            
+                
+                {% for op in panier.getOrderProducts %}
+            
+                <div class="panierArt darkMode" data-op-id="{{ op.id }}">
+                    <div class="cardPanier">
+                        <img src="{{ op.getProducts.pic }}">
+                        <h3>{{ op.getProducts.name }}</h3>
+                        <p>{{ op.getPriceUnit }} €</p>
+                        <button class="quantitySup" data-op-id="{{ op.id }}">🗑️</button>
+                        <button class="quantityM" data-op-id="{{ op.id }}">-</button>
+                        <span class="quantity">{{ op.getQuantity }}</span>
+                        <button class="quantityP" data-op-id="{{ op.id }}">+</button>
+                        <p class="line-total">{{ (op.getQuantity * op.getPriceUnit)|number_format(2, '.', ',') }} €</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="recap darkMode">
+                <h3>Récapiculatif</h3>
+                <p>Total nombre d'articles: <span class="total-quantity">{{ panier.totalQuantity }} </span></p> <br>
+                <p>Prix total:  <span class="total-price">{{ panier.totalPrice }} € </span></p>
+
+                <h3 class="h3Livr">Adresse de livraison</h3>
+                <div class="addressForm">
+                {{ form_start(addressForm) }}
+                    
+                    <div class="form-group">
+                        {{ form_label(addressForm.address) }}
+                        {{ form_widget(addressForm.address) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(addressForm.postal) }}
+                        {{ form_widget(addressForm.postal) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(addressForm.city) }}
+                        {{ form_widget(addressForm.city) }}
+                    </div>
+                </div>
+
+                {{ form_end(addressForm) }}
+
+                <button class="paye">Payer</button>
+            </div>     
+                
+        {% else %}
+            <h2>Votre panier est vide</h2>
+        {% endif %}
+
+    </div>
     
     <a class="HP" href="#">Haut de page</a>
+   
     
 {% endblock %}

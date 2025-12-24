@@ -14,7 +14,14 @@ use App\Form\ProductsType;
 use App\Entity\Products;
 use App\Entity\Order;
 use App\Entity\OrderProducts;
+use App\Entity\User;
 use App\Repository\OrderRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Stripe\StripeClient;
+use Stripe\Checkout\Session;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Psr\Log\LoggerInterface;
+
 
 final class HomeController extends AbstractController
 {
@@ -136,10 +143,37 @@ final class HomeController extends AbstractController
 
     
     #[Route('/panier', name: 'app_panier')]
-    public function panier(): Response
+    public function panier(OrderRepository $or, Request $r, EntityManagerInterface $em): Response
     {
+
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $panier = $or->findCartByUser($user);
+
+        $addressData = [
+            'address' => $user->getAddress(),
+            'postal' => $user->getPostal(),
+            'city' => $user->getCity(),
+        ];
+
+        $form = $this->createFormBuilder($addressData)
+            ->add('address', null, [
+                'label' => 'Rue / voie',
+                'attr' => ['class' => 'input']])
+            ->add('postal', null, [
+                'label' => 'Code postal',
+                'attr' => ['class' => 'input']])
+            ->add('city', null, [
+                'label' => 'Ville',
+                'attr' => ['class' => 'input']])
+            ->getForm();
+
+        $form->handleRequest($r);
+    
+
         return $this->render('panier.html.twig', [
-            'controller_name' => 'HomeController',
+            'panier' => $panier,
+            'addressForm' => $form->createView(),
         ]);
     }
 
@@ -203,7 +237,184 @@ final class HomeController extends AbstractController
     }   
     
 
+    #[Route('/panier/update/{id}', name: 'panier_update', methods: ['POST'])]
+    public function update(OrderProducts $op, Request $r, EntityManagerInterface $em): JsonResponse
+    {
+        $action = $r->request->get('action');
+        $order =$op->getOrderRef();
 
+        $removeLine = false;
+
+        if ($action === 'increase') {
+            $op->setQuantity($op->getQuantity() + 1);
+        } elseif ($action === 'decrease') {            
+            if ($op->getQuantity() > 1) {
+                $op->setQuantity($op->getQuantity() - 1);
+            } else {
+                $removeLine = true;
+                $em->remove($op);
+            }
+        } elseif ($action === 'remove') {
+            $removeLine = true;
+            $em->remove($op);
+        }
+
+        $em->flush();
+
+        // Mettre à jour totals
+        $totalQuantity = 0;
+        $totalPrice = "0.00";
+        foreach ($order->getOrderProducts() as $line) {
+            $quantity = (string)$line->getQuantity();
+            $priceUnit = (string)$line->getPriceUnit();
+            $lineTotal = bcmul($priceUnit, $quantity, 2);
+            $totalPrice = bcadd($totalPrice, $lineTotal, 2);
+            $totalQuantity += (int)$quantity;
+        }
+        $order->setTotalQuantity($totalQuantity);
+        $order->setTotalPrice($totalPrice);
+
+        $em->flush();
+
+        
+
+    
+        
+
+        // Vérifier si le panier est vide
+        if ($order->getOrderProducts()->isEmpty()) {
+            $em->remove($order);
+            $em->flush();
+        
+            return $this->json([
+                'quantity' => 0,
+                'lineTotal' => '0.00',
+                'totalQuantity' => 0,
+                'totalPrice' => '0.00'
+            ]);
+        }
+
+
+        return $this->json([
+            'quantity' => $removeLine ? 0 : $op->getQuantity(),
+            'lineTotal' => $removeLine ? '0.00' : number_format((float)$op->getQuantity() * (float)$op->getPriceUnit(), 2, '.', ','),
+            'totalQuantity' => $order->getTotalQuantity(),
+            'totalPrice' => number_format($order->getTotalPrice(), 2, '.', ',')
+        ]);
+    }
+
+
+    /* ------------------------------------ Historique ------------------------------------ */
+
+
+
+
+    #[Route('/history', name: 'app_history')]
+    public function history(OrderRepository $or): Response
+    {
+
+        $user = $this->getUser();
+        $paidOrders = $or->findPaidByUser($user);
+
+        return $this->render('historique.html.twig', [
+            'paidOrders' => $paidOrders,
+        ]);
+    }
+
+
+
+
+    /* ------------------------------------ Paiement ------------------------------------ */
+
+    
+
+    #[Route('/panier/create-session', name: 'app_create_stripe_session', methods: ['POST'])]
+    public function createStripeSession(OrderRepository $or): JsonResponse
+    {
+        $user = $this->getUser();
+        $panier = $or->findCartByUser($user);
+
+        $stripe = new StripeClient($_ENV['STRIPE_SECRET_KEY']);
+
+        $session = $stripe->checkout->sessions->create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => (int) bcmul($panier->getTotalPrice(), '100'),
+                    'product_data' => [
+                        'name' => 'Commande numéro:' . $panier->getId(),
+                        'description' => 'Commande sécurisé par carte bancaire',
+                    ],
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => $this->generateUrl('app_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url' => $this->generateUrl('app_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'metadata' => [
+                'order_id' => $panier->getId(), // <-- AJOUTÉ
+            ],
+
+        ]);
+
+        return $this->json(['id' => $session->id]);
+    }
+
+    #[Route('/panier/success', name: 'app_success')]
+    public function success(): Response
+    {
+        return $this->render('success.html.twig');
+    }
+
+    #[Route('/panier/cancel', name: 'app_cancel')]
+    public function cancel(): Response
+    {
+        return $this->redirectToRoute('app_panier');
+    }
+
+    #[Route('/stripe/webhook', name: 'stripe_webhook', methods: ['POST'])]
+    public function webhook(Request $r, EntityManagerInterface $em, LoggerInterface $logger): Response {
+        \Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+
+        $payload = $r->getContent();
+        $sigHeader = $r->headers->get('stripe-signature');
+
+        try {
+            $event = \Stripe\Webhook::constructEvent(
+                $payload,
+                $sigHeader,
+                $_ENV['STRIPE_WEBHOOK_SECRET']
+            );
+
+            if ($event->type === 'checkout.session.completed') {
+                $session = $event->data->object;
+                $orderId = $session->metadata->order_id;
+
+                if ($orderId) {
+                    $order = $em->getRepository(Order::class)->find($orderId);
+
+                    if ($order && $order->getStatus() !== 'paid') {
+                        $order->setStatus('paid');
+
+                        foreach ($order->getOrderProducts() as $item) {
+                            $product = $item->getProducts();
+                            $product->setStock(
+                                $product->getStock() - $item->getQuantity()
+                            );
+                        }
+
+                        $em->flush();
+                    }
+                }
+
+            }
+        }   catch(\Throwable $e) {
+                $logger->error('Stripe webhook error: ' .$e->getMessage());
+            }
+
+        return new Response('OK');
+    }
 
     /* ------------------------------------ Infos/Contact ------------------------------------ */
 
