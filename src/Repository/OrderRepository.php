@@ -28,7 +28,17 @@ class OrderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-
+    public function findPaidByUser($user): array
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.user = :user')
+            ->andWhere('o.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', 'paid')
+            ->orderBy('o.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
 
 

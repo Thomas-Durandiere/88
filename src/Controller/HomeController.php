@@ -14,11 +14,13 @@ use App\Form\ProductsType;
 use App\Entity\Products;
 use App\Entity\Order;
 use App\Entity\OrderProducts;
+use App\Entity\User;
 use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Stripe\StripeClient;
 use Stripe\Checkout\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Psr\Log\LoggerInterface;
 
 
 final class HomeController extends AbstractController
@@ -141,14 +143,37 @@ final class HomeController extends AbstractController
 
     
     #[Route('/panier', name: 'app_panier')]
-    public function panier(OrderRepository $or): Response
+    public function panier(OrderRepository $or, Request $r, EntityManagerInterface $em): Response
     {
 
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
         $panier = $or->findCartByUser($user);
 
+        $addressData = [
+            'address' => $user->getAddress(),
+            'postal' => $user->getPostal(),
+            'city' => $user->getCity(),
+        ];
+
+        $form = $this->createFormBuilder($addressData)
+            ->add('address', null, [
+                'label' => 'Rue / voie',
+                'attr' => ['class' => 'input']])
+            ->add('postal', null, [
+                'label' => 'Code postal',
+                'attr' => ['class' => 'input']])
+            ->add('city', null, [
+                'label' => 'Ville',
+                'attr' => ['class' => 'input']])
+            ->getForm();
+
+        $form->handleRequest($r);
+    
+
         return $this->render('panier.html.twig', [
             'panier' => $panier,
+            'addressForm' => $form->createView(),
         ]);
     }
 
@@ -279,6 +304,26 @@ final class HomeController extends AbstractController
     }
 
 
+    /* ------------------------------------ Historique ------------------------------------ */
+
+
+
+
+    #[Route('/history', name: 'app_history')]
+    public function history(OrderRepository $or): Response
+    {
+
+        $user = $this->getUser();
+        $paidOrders = $or->findPaidByUser($user);
+
+        return $this->render('historique.html.twig', [
+            'paidOrders' => $paidOrders,
+        ]);
+    }
+
+
+
+
     /* ------------------------------------ Paiement ------------------------------------ */
 
     
@@ -329,9 +374,7 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/stripe/webhook', name: 'stripe_webhook', methods: ['POST'])]
-    public function webhook(
-        Request $r,
-        EntityManagerInterface $em): Response {
+    public function webhook(Request $r, EntityManagerInterface $em, LoggerInterface $logger): Response {
         \Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
         $payload = $r->getContent();
@@ -367,7 +410,7 @@ final class HomeController extends AbstractController
 
             }
         }   catch(\Throwable $e) {
-                $this->logger->error('Stripe webhook error: ' .$e->getMessage());
+                $logger->error('Stripe webhook error: ' .$e->getMessage());
             }
 
         return new Response('OK');

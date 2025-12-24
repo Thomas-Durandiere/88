@@ -13,6 +13,7 @@
             {% elseif is_granted("ROLE_USER") %} 
         <div class="bandeauLog darkMode">
             <a class="boutAct" type="button" href="{{ path('app_panier')}}" >Panier</a>
+            <a class="boutAct" type="button" href="{{ path('app_history')}}" >Historique</a>
             <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion" title="Déconnexion"></a>
         </div>
         {% endif %}
