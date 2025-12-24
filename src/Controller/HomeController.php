@@ -307,6 +307,9 @@ final class HomeController extends AbstractController
             'mode' => 'payment',
             'success_url' => $this->generateUrl('app_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'cancel_url' => $this->generateUrl('app_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'metadata' => [
+                'order_id' => $panier->getId(), // <-- AJOUTÉ
+            ],
 
         ]);
 
@@ -325,7 +328,50 @@ final class HomeController extends AbstractController
         return $this->redirectToRoute('app_panier');
     }
 
+    #[Route('/stripe/webhook', name: 'stripe_webhook', methods: ['POST'])]
+    public function webhook(
+        Request $r,
+        EntityManagerInterface $em): Response {
+        \Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
+        $payload = $r->getContent();
+        $sigHeader = $r->headers->get('stripe-signature');
+
+        try {
+            $event = \Stripe\Webhook::constructEvent(
+                $payload,
+                $sigHeader,
+                $_ENV['STRIPE_WEBHOOK_SECRET']
+            );
+
+            if ($event->type === 'checkout.session.completed') {
+                $session = $event->data->object;
+                $orderId = $session->metadata->order_id;
+
+                if ($orderId) {
+                    $order = $em->getRepository(Order::class)->find($orderId);
+
+                    if ($order && $order->getStatus() !== 'paid') {
+                        $order->setStatus('paid');
+
+                        foreach ($order->getOrderProducts() as $item) {
+                            $product = $item->getProducts();
+                            $product->setStock(
+                                $product->getStock() - $item->getQuantity()
+                            );
+                        }
+
+                        $em->flush();
+                    }
+                }
+
+            }
+        }   catch(\Throwable $e) {
+                $this->logger->error('Stripe webhook error: ' .$e->getMessage());
+            }
+
+        return new Response('OK');
+    }
 
     /* ------------------------------------ Infos/Contact ------------------------------------ */
 
