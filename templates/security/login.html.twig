@@ -49,10 +49,11 @@
                 </div>
             #}
 
-            <button class="bout" type="submit">
+            <button class="bout" id="lienInsc" type="submit">
                 Envoyer
             </button>
-            <p>Pas encore inscrit? Vous le pouvez en suivant ce lien: <a id="lienInsc" href="{{ path('app_register') }}">Inscription</a></p>
+            <p>Pas encore inscrit? Vous le pouvez en suivant ce lien : </p>
+            <a class="bout" id="lienInsc" href="{{ path('app_register') }}">Inscription</a>
         </form>
     </main>
 {% endblock %}

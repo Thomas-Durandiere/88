@@ -19,7 +19,7 @@
 .dark table, .dark .darkMode {
     background-color: #444444;
 }
-.dark .divMess a, .dark #lienInsc {
+.dark .divMess a {
     color: white;
 }
 .dark .history {
@@ -253,6 +253,23 @@ table {
 
 /* --------------------------- Photos ---------------------- */
 
+
+.gallery {
+    margin: 50px 50px;
+}
+.gallery img {
+    max-width: 300px;
+    border-radius: 10px;
+}
+#categoryForm {
+    margin-left: 50px;
+    margin-bottom: -80px;
+}
+#select {
+    height: 40px;
+    padding: 5px;
+    border-radius: 10px;
+}
 
 /* --------------------------- Boutique ---------------------- */
 
@@ -523,7 +540,7 @@ iframe {
     margin-bottom: 20px;
     font-size: 1.2em;
 }
-.divMess a, #lienInsc {
+.divMess a, {
     text-decoration: none;
     color: #2B2B2B;
 }
@@ -619,4 +636,8 @@ iframe {
     border-radius: 5px;
     font-size: 1rem;
     width: 60%;
+}
+#lienInsc {
+    margin: auto;
+    text-decoration: none;
 }
