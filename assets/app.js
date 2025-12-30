@@ -134,3 +134,14 @@ document.querySelector('.paye').addEventListener('click', async () => {
         alert('Erreur lors de la création de la session Stripe.');
     }
 });
+
+
+// ----------------------- Prestation accordéon -------------------------------
+
+
+document.querySelectorAll('.presta-title').forEach(title => {
+    title.addEventListener('click', () => {
+        const content = title.nextElementSibling;
+        content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+    });
+});

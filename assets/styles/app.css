@@ -5,6 +5,11 @@
     margin: 0;
     box-sizing: border-box;
 }
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* masque le scroll horizontal “fictif” */
+}
 
 /* --------------------------- Jour/Nuit ---------------------- */
 
@@ -32,12 +37,9 @@
 
 header {
     background-image: url(../images/logo/Bois.jpeg);
-    padding-top: 50px;
 }
 #bandeau {
-    position: absolute; /* ou fixed si tu veux qu'il reste à l'écran en scrollant */
-    top: 0;
-    left: 0;
+    position: relative; /* ou fixed si tu veux qu'il reste à l'écran en scrollant */
     width: 100%;
     text-shadow: -3px 2px 2px black;
     display: flex;
@@ -99,10 +101,11 @@ footer {
     background-image: url(../images/logo/Bois.jpeg);
 }
 #footer {
-    height: 70px;
+    min-height: 70px;
     display: flex;
     justify-content: space-between;    
     align-items: center;
+    padding: 20px;
 }
 #mentions {
     display: flex;
@@ -131,7 +134,7 @@ footer {
     display: none;
 }
 #telLogo img {
-    max-width: 30px;
+    max-width: 40px;
 }
 #insta {
     max-width: 40px;
@@ -178,6 +181,9 @@ h2 {
 }
 .bloc img {
     width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 .HP {
@@ -229,10 +235,10 @@ h4 {
     margin-bottom: 20px;
     font-size: 0.8em;
 }
-tr {
+/* tr {
     padding-top: 20px;
     padding-bottom: 20px;
-}
+} */
 table {
     border-spacing: 40px;
     border: 1px solid black;
@@ -240,17 +246,26 @@ table {
     background-color: #f7f7f7;
     width: 100%;
     table-layout: fixed;
+    overflow: hidden;
+}
+tbody {
+    border-radius: 10px;
 }
 .td1 {
     width: 60%;
+    padding: 20px;
 }
 .td2 {
     width: 15%;
+    padding: 20px;
 }
 .td3 {
     width: 25%;
+    padding: 20px;
 }
-
+.presta-content {
+    display: block;
+}
 
 /* --------------------------- Photos ---------------------- */
 
@@ -642,4 +657,90 @@ iframe {
 #lienInsc {
     margin: auto;
     text-decoration: none;
+}
+
+
+/* --------------------------- Media Query ---------------------- */
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    background-size: 50px 50px;
+    width: 50px;
+    height: 50px;
+}
+.navbar-toggler {
+    padding: 0.5rem 0.75rem;
+}
+
+@media all and (min-width: 1610px) {
+  /* Afficher le menu en horizontal */
+    .responsive {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+  /* Forcer la collapse à être visible et horizontal */
+    .responsive .collapse {
+        display: flex !important;
+        flex-basis: auto;
+    }
+
+  /* Les liens en horizontal */
+    .responsive .navbar-nav {
+        flex-direction: row !important;
+        gap: 20px; /* espace entre les liens */
+    }
+
+  /* Cacher le bouton burger */
+    .responsive .navbar-toggler {
+        display: none;
+    }
+}
+
+
+@media all and (max-width: 1160px) {
+    .accueil {        
+        flex-direction: column;
+    }
+    h1 {
+        display: none;
+    }
+    #enTete {        
+        justify-content: space-around;
+    }
+    #bandeau {
+        flex-direction: column;
+        margin-left: 40px;
+    }
+}
+
+@media all and (max-width: 810px) {
+    #mentions {
+        flex-direction: column;
+    }
+    #tel {
+        display: none;
+    }
+    #telLogo {
+        display: block;
+    }
+    .presta-content {
+        display: none; /* caché par défaut */
+    }
+    .presta-title {
+        cursor: pointer;
+        background-color: #eee;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    table, thead, tbody, tr, td, th {
+        display: block;
+        width: 100%;
+    }
+    td, th {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
 }
