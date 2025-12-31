@@ -24,7 +24,7 @@ html, body {
 .dark table, .dark .darkMode {
     background-color: #444444;
 }
-.dark .divMess a {
+.dark .divMess a, .dark .darkMode {
     color: white;
 }
 .dark .history {
@@ -262,9 +262,7 @@ tbody {
 .presta-content {
     display: block;
 }
-/* .presta-title {
-    background-color: none;
-} */
+
 
 /* --------------------------- Photos ---------------------- */
 
@@ -559,7 +557,7 @@ iframe {
     margin-bottom: 20px;
     font-size: 1.2em;
 }
-.divMess a, {
+.divMess a {
     text-decoration: none;
     color: #2B2B2B;
 }
