@@ -235,10 +235,6 @@ h4 {
     margin-bottom: 20px;
     font-size: 0.8em;
 }
-/* tr {
-    padding-top: 20px;
-    padding-bottom: 20px;
-} */
 table {
     border-spacing: 40px;
     border: 1px solid black;
@@ -266,6 +262,9 @@ tbody {
 .presta-content {
     display: block;
 }
+/* .presta-title {
+    background-color: none;
+} */
 
 /* --------------------------- Photos ---------------------- */
 
@@ -274,7 +273,7 @@ tbody {
     margin: 50px 50px;
 }
 .gallery img {
-    max-width: 300px;
+    max-width: 360px;
     border-radius: 10px;
 }
 #categoryForm {
@@ -285,6 +284,9 @@ tbody {
     height: 40px;
     padding: 5px;
     border-radius: 10px;
+}
+.photo-card {
+    width: 100%;
 }
 
 /* --------------------------- Boutique ---------------------- */
@@ -664,9 +666,9 @@ iframe {
 
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-    background-size: 50px 50px;
-    width: 50px;
-    height: 50px;
+    background-size: 40px 40px;
+    width: 40px;
+    height: 40px;
 }
 .navbar-toggler {
     padding: 0.5rem 0.75rem;
@@ -730,17 +732,24 @@ iframe {
     }
     .presta-title {
         cursor: pointer;
-        background-color: #eee;
+        background-color: #f7f7f7;
         padding: 10px;
         border-radius: 5px;
     }
+    .dark .presta-title {
+        background-color: #444444;
+        color: white;
+    }
     table, thead, tbody, tr, td, th {
-        display: block;
-        width: 100%;
+        display: block !important;
+        width: 100% !important;
+    }
+    tr {
+        padding: 20px 10px;
     }
     td, th {
         display: flex;
         justify-content: space-between;
-        padding: 10px;
+        padding: 0 10px !important;
     }
 }

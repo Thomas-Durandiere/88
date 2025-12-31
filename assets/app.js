@@ -110,38 +110,45 @@ document.querySelectorAll('.quantityM, .quantityP, .quantitySup').forEach(btn =>
 
 const stripe = Stripe('pk_test_51Sh819LYNBUdrngnXI0fpgGTc3Q1TWQkvNbFGVKowrFmueJe1DFMq35zuf1I3GFJ37Rrwhnd98nqhOrlqTothtuv00URg6FM7l');
 
-document.querySelector('.paye').addEventListener('click', async () => {
-    try {
-        // Crée la session côté serveur
-        const response = await fetch('/panier/create-session', {
-            method: 'POST',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        });
+const payButton = document.querySelector('.paye');
+if (payButton) {
 
-        const data = await response.json();
+    document.querySelector('.paye').addEventListener('click', async () => {
+        try {
+            // Crée la session côté serveur
+            const response = await fetch('/panier/create-session', {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
 
-        // Redirige vers Stripe Checkout
-        const result = await stripe.redirectToCheckout({
-            sessionId: data.id
-        });
+            const data = await response.json();
 
-        if (result.error) {
-            // Affiche l'erreur s'il y en a
-            alert(result.error.message);
+            // Redirige vers Stripe Checkout
+            const result = await stripe.redirectToCheckout({
+                sessionId: data.id
+            });
+
+            if (result.error) {
+                // Affiche l'erreur s'il y en a
+                alert(result.error.message);
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erreur lors de la création de la session Stripe.');
         }
-    } catch (err) {
-        console.error(err);
-        alert('Erreur lors de la création de la session Stripe.');
-    }
-});
+    });
+
+}
 
 
 // ----------------------- Prestation accordéon -------------------------------
 
 
-document.querySelectorAll('.presta-title').forEach(title => {
-    title.addEventListener('click', () => {
-        const content = title.nextElementSibling;
-        content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.presta-title').forEach(title => {
+        title.addEventListener('click', () => {
+            const content = title.nextElementSibling;
+            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+        });
     });
 });
