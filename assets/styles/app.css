@@ -188,6 +188,7 @@ h2 {
 
 .HP {
     background-color: #f7f7f7;
+    color: black;
     font-family: "Montserrat";
     display: inline-block;
     text-decoration: none;
@@ -526,7 +527,7 @@ h3 {
 
 }
 .iframe {
-    max-width: 60%;
+    max-width: 70%;
     margin: 30px auto;
 }
 iframe {    
@@ -534,7 +535,7 @@ iframe {
   margin: 40px auto;
 }
 #logoInfos {
-    max-width: 300px;
+    width: 100%;
     margin-bottom: 50px;
     display: block;
     margin-left: auto;
@@ -713,6 +714,23 @@ iframe {
         flex-direction: column;
         margin-left: 40px;
     }
+}
+
+@media all and (max-width: 900px) {
+    #logoInfos {
+        display: none;
+    }
+    .IC {
+        flex-direction: column-reverse;
+        gap: 40px;
+    }
+    .ICD {
+        width: 70%;
+    }
+    .contact {
+        width: 70%;
+    }
+
 }
 
 @media all and (max-width: 810px) {
