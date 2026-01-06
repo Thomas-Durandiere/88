@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messages{% endblock %}
+
+{% block body %}
+    
+    <h2 id="h2Infos">Vos messages</h2>
+
+{% if messages is empty %}
+    <h3>Aucun message pour le moment</h3>
+{% else %}
+
+    <div class="divMess">
+        {% for msg in messages %}
+            <div class="card darkMode">                
+                <div class="div1 darkMode">
+                    <span class="date">{{ msg.date }}</span>
+                    <span class="email"><a href="mailto:{{ msg.email }}" target="_blank">{{ msg.email }}</span>
+                    <a class="deleteMess" href="{{ path('app_deleteMessage', { index: loop.index0 }) }}" onclick="return confirm('Supprimer ce message ?');">✖</a>
+                </div>
+
+                <div class="div2 darkMode">
+                    <span class="prenom">{{ msg.prenom }}</span>
+                    <span class="nom">{{ msg.nom }}</span>
+                </div>
+
+                <div class="div3 darkMode">
+                    <p>Message: </p>{{ msg.message }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+{% endif %}
+
+    <a class="HP" href="#">Haut de page</a>
+
+{% endblock %}

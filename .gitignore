@@ -1,0 +1,8 @@
+# Bases de données locales
+mysql/
+mongodb/
+
+# Fichiers système
+*.sock
+*.lock
+*.turtle
