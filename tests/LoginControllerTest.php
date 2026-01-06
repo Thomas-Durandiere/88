@@ -18,6 +18,8 @@ class LoginControllerTest extends WebTestCase
         $em = $container->get('doctrine.orm.entity_manager');
         $userRepository = $em->getRepository(User::class);
 
+        
+
         // Remove any existing users from the test database
         foreach ($userRepository->findAll() as $user) {
             $em->remove($user);
@@ -29,11 +31,25 @@ class LoginControllerTest extends WebTestCase
         /** @var UserPasswordHasherInterface $passwordHasher */
         $passwordHasher = $container->get('security.user_password_hasher');
 
-        $user = (new User())->setEmail('email@example.com');
-        $user->setPassword($passwordHasher->hashPassword($user, 'password'));
+        // $user = (new User())->setEmail('email@example.com');
+        // $user->setPassword($passwordHasher->hashPassword($user, 'password'));
 
-        $em->persist($user);
-        $em->flush();
+        // créer un utilisateur complet
+            $user = (new User())
+                ->setEmail('email@example.com')
+                ->setName('Dupont')
+                ->setFirstname('Jean')
+                ->setPassword(
+                    $passwordHasher->hashPassword($user, 'password')
+                )
+                ->setRoles(['ROLE_USER'])
+                ->setAddress('10 rue de Paris')
+                ->setPostal('75001')
+                ->setCity('Paris')
+                ->setPhone('0102030405');
+
+            $em->persist($user);
+            $em->flush();
     }
 
     public function testLogin(): void
@@ -42,7 +58,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->request('GET', '/login');
         self::assertResponseIsSuccessful();
 
-        $this->client->submitForm('Sign in', [
+        $this->client->submitForm('Envoyer', [
             '_username' => 'doesNotExist@example.com',
             '_password' => 'password',
         ]);
@@ -57,7 +73,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->request('GET', '/login');
         self::assertResponseIsSuccessful();
 
-        $this->client->submitForm('Sign in', [
+        $this->client->submitForm('Envoyer', [
             '_username' => 'email@example.com',
             '_password' => 'bad-password',
         ]);
@@ -69,12 +85,12 @@ class LoginControllerTest extends WebTestCase
         self::assertSelectorTextContains('.alert-danger', 'Invalid credentials.');
 
         // Success - Login with valid credentials is allowed.
-        $this->client->submitForm('Sign in', [
+        $this->client->submitForm('Envoyer', [
             '_username' => 'email@example.com',
             '_password' => 'password',
         ]);
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects('/boutique');
         $this->client->followRedirect();
 
         self::assertSelectorNotExists('.alert-danger');

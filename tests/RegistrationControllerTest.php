@@ -35,11 +35,17 @@ class RegistrationControllerTest extends WebTestCase
         // Register a new user
         $this->client->request('GET', '/register');
         self::assertResponseIsSuccessful();
-        self::assertPageTitleContains('Register');
+        self::assertPageTitleContains('Inscription');
 
-        $this->client->submitForm('Register', [
+        $this->client->submitForm('Envoyer', [
             'registration_form[email]' => 'me@example.com',
             'registration_form[plainPassword]' => 'password',
+            'registration_form[name]' => 'Jean',
+            'registration_form[firstname]' => 'Dupont',
+            'registration_form[address]' => '10 rue de Paris',
+            'registration_form[postal]' => '75001',
+            'registration_form[city]' => 'Paris',
+            'registration_form[phone]' => '0102030405',
             'registration_form[agreeTerms]' => true,
         ]);
 
