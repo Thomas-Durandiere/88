@@ -4,8 +4,50 @@
 
 {% block body %}
 
+    {% if is_granted("ROLE_ADMIN") %}
+        <div class="bandeauLog darkMode">
+            <a class="boutAct" href="{{ path('app_photosAdd')}}" >Ajouter</a>
+            <a class="boutAct" href="{{ path('app_messages')}}" >Messages</a>
+            <a href="{{ path('app_logout')}}" ><img class="deco" id="iconDeco" src="{{ asset('images/logo/deco.png') }}" data-light="{{ asset('images/logo/deco.png') }}" 
+                data-dark="{{ asset('images/logo/decoB.png') }}" alt="Déconnexion" title="Déconnexion"></a>
+        </div>
+        {% endif %}
+
     <h2 id="h2Infos">Photos</h2>
 
+    {% for msg in app.flashes('success') %}
+            <div class="alert darkMode">
+                <span>{{ msg }}</span>
+                <button class="delete-btn">✖</button>
+            </div>
+        {% endfor %}
+
+
+    <form method="get" id="categoryForm">
+        <select id="select" name="category" onchange="this.form.submit()">
+            <option value="">Toutes les catégories</option>
+            {% for label, value in categories %}
+                <option value="{{ value }}" {% if selected == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <div class="gallery affArt">
+            {% for photo in photos %}
+
+        <div class="contener darkMode">
+            <div class="photo-card">
+                <img src="{{ photo.url }}" alt="{{ photo.alt }}" title="{{ photo.title }}">
+            </div>
+
+            {% if is_granted("ROLE_ADMIN") %}
+                    <div class="action">
+                        <a href="{{ path('app_deletePic', {'id': photo.id}) }}" type="button" class="boutAct" > Supprimer </a>
+                    </div>
+                {% endif %}
+        </div>
+            {% endfor %}
+    </div>
 
 
 
@@ -13,3 +55,10 @@
     <a class="HP" href="#">Haut de page</a>
     
 {% endblock %}
+
+
+
+
+                
+
+         

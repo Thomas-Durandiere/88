@@ -8,19 +8,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Form\ContactType;
 use App\Service\Meteo;
+use App\Form\ContactType;
 use App\Form\ProductsType;
+use App\Form\PhotoType;
 use App\Entity\Products;
 use App\Entity\Order;
 use App\Entity\OrderProducts;
 use App\Entity\User;
+use App\Entity\Photo;
 use App\Repository\OrderRepository;
+use App\Repository\PhotoRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Stripe\StripeClient;
 use Stripe\Checkout\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
+use App\Controller\PanierController;
+use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 final class HomeController extends AbstractController
@@ -56,15 +64,81 @@ final class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
     }
-    
+
+    /* ------------------------------------ Photos ------------------------------------ */
+
+
     #[Route('/photos', name: 'app_photos')]
-    public function photos(): Response
+    public function photos(Request $r, PhotoRepository $pr): Response
     {
+        $category = $r->query->get('category');
+
+        if ($category) {
+            $photos = $pr->findBy(['category' => $category]);
+        } else {
+            $photos = $pr->findAll();
+        }
+
+        $categories = ['Couleur' => 'Couleur', 'Coupe' => 'Coupe', 'Event' => 'Event'];
+
+        
         return $this->render('photos.html.twig', [
-            'controller_name' => 'HomeController',
+            'photos' => $photos,
+            'categories' => $categories,
+            'selected' => $category,
         ]);
     }
     
+    #[Route('/photos/add', name: 'app_photosAdd')]
+    public function photosAdd(Request $r, EntityManagerInterface $em): Response
+    {
+        $photo = new Photo();
+        $form = $this->createForm(PhotoType::class, $photo);
+        $form->handleRequest($r);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $file */
+            $file = $form->get('imageFile')->getData();
+            if ($file) {
+                $fileName = uniqid().'.'.$file->guessExtension();
+
+                $file->move(
+                    $this->getParameter('photos_directory'),
+                    $fileName
+                );
+
+                // URL à enregistrer en base
+                $photo->setUrl('/images/photos/'.$fileName);
+            }
+
+            $em->persist($photo);
+            $em->flush();
+
+            $this->addFlash('success', 'Photo ajoutée avec succès!');
+            return $this->redirectToRoute('app_photosAdd');
+        }
+
+        
+
+        return $this->render('photosAdd.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[route('/photo/delete/{id}', name: 'app_deletePic')]
+    public function deletePic(EntityManagerInterface $em, $id)
+    {
+        $p = $em->getRepository(Photo::class)->find($id);
+        $em->remove($p);
+        $em->flush();
+        $this->addFlash(
+                'success',
+                'Photo supprimé avec succès'
+            );
+
+        return $this->redirectToRoute('app_photos');
+    }
 
     /* ------------------------------------ Boutique ------------------------------------ */
 
@@ -126,10 +200,13 @@ final class HomeController extends AbstractController
     }
 
     #[route('/delete/{id}', name: 'app_delete')]
-    public function delete(EntityManagerInterface $em, $id)
+    public function delete(int $id, EntityManagerInterface $em)
     {
         $p = $em->getRepository(Products::class)->find($id);
-        $em->remove($p);
+         if (!$p) {
+            throw $this->createNotFoundException('Produit non trouvé');
+        }
+        $em->remove($p);       
         $em->flush();
         $this->addFlash(
                 'success',
@@ -274,11 +351,7 @@ final class HomeController extends AbstractController
         $order->setTotalQuantity($totalQuantity);
         $order->setTotalPrice($totalPrice);
 
-        $em->flush();
-
-        
-
-    
+        $em->flush();   
         
 
         // Vérifier si le panier est vide
@@ -506,6 +579,8 @@ final class HomeController extends AbstractController
 
         return $this->redirectToRoute('app_messages');
     }
+
+
 
 
 }
