@@ -24,6 +24,11 @@ use Stripe\StripeClient;
 use Stripe\Checkout\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
+use App\Controller\PanierController;
+use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 final class HomeController extends AbstractController
@@ -195,10 +200,13 @@ final class HomeController extends AbstractController
     }
 
     #[route('/delete/{id}', name: 'app_delete')]
-    public function delete(EntityManagerInterface $em, $id)
+    public function delete(int $id, EntityManagerInterface $em)
     {
         $p = $em->getRepository(Products::class)->find($id);
-        $em->remove($p);
+         if (!$p) {
+            throw $this->createNotFoundException('Produit non trouvé');
+        }
+        $em->remove($p);       
         $em->flush();
         $this->addFlash(
                 'success',
@@ -571,6 +579,8 @@ final class HomeController extends AbstractController
 
         return $this->redirectToRoute('app_messages');
     }
+
+
 
 
 }

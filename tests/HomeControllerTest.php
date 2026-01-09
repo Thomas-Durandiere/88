@@ -5,10 +5,18 @@ namespace App\Tests\Controller;
 use App\Service\Meteo;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Entity\Photo;
+use App\Entity\User;
+use App\Entity\Products;
+use App\Entity\Order;
+use App\Entity\OrderProducts;
 use App\Form\PhotoType;
 use App\Repository\PhotoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 
 class HomeControllerTest extends WebTestCase
 {
@@ -233,4 +241,487 @@ class HomeControllerTest extends WebTestCase
         $this->assertResponseRedirects('/photos');
     }
 
+    public function testPhotosAddSubmit(): void
+    {
+        $client = static::createClient();
+        $em = $client->getContainer()->get('doctrine')->getManager();
+
+        // Créer un fichier temporaire simulant un upload
+        $tmpFile = tempnam(sys_get_temp_dir(), 'upl');
+        imagepng(imagecreatetruecolor(10, 10), $tmpFile); // créer une image 10x10
+        $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile(
+            $tmpFile,
+            'test.png',
+            'image/png',
+            null,
+            true // test mode, ne fait pas de vérification réelle
+        );
+
+        // Récupérer le formulaire
+        $crawler = $client->request('GET', '/photos/add');
+        $form = $crawler->selectButton('Envoyer')->form(); // adapter le nom du bouton
+
+        // Remplir le formulaire
+        $form['photo[name]'] = 'Nom test';
+        $form['photo[title]'] = 'Titre test';
+        $form['photo[alt]'] = 'Alt test';
+        $form['photo[category]'] = 'Couleur';
+        $form['photo[imageFile]'] = $uploadedFile;
+
+        $client->submit($form);
+
+        // Vérifier la redirection après ajout
+        $this->assertResponseRedirects('/photos/add');
+
+        // Vérifier que la photo a été persistée
+        $photo = $em->getRepository(\App\Entity\Photo::class)
+            ->findOneBy(['name' => 'Nom test']);
+
+        $this->assertNotNull($photo);
+        $this->assertStringContainsString('/images/photos/', $photo->getUrl());
+
+        // Nettoyage : supprimer le fichier temporaire
+        @unlink($tmpFile);
+    }
+    
+
+
+        //--------------------------- Boutique ----------------------------
+
+
+    public function testAjouterProductPage(): void
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/ajouter');
+        $this->assertResponseIsSuccessful();
+
+        // Vérifier que le formulaire existe
+        $this->assertSelectorExists('form');
+    }
+
+    public function testAjouterProductSubmit(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+
+        // Accéder à la page GET pour récupérer le formulaire
+        $crawler = $client->request('GET', '/ajouter');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('form');
+
+        // Récupérer le formulaire via le bouton submit
+        $form = $crawler->selectButton('Ajouter')->form([
+            'products[name]' => 'Test Product',
+            'products[description]' => 'Description test',
+            'products[pic]' => 'https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/396e9/MainBefore.jpg',
+            'products[price]' => '19.99',
+            'products[stock]' => '10',
+        ]);
+
+        // Soumettre le formulaire
+        $client->submit($form);
+
+        // Vérifier la redirection après succès
+        $this->assertResponseRedirects('/ajouter');
+
+        // Suivre la redirection
+        $crawler = $client->followRedirect();
+        $this->assertResponseIsSuccessful();
+
+        // Vérifier que le produit a bien été persisté dans la base de test
+        /** @var \Doctrine\ORM\EntityManagerInterface $em */
+        $em = $container->get(EntityManagerInterface::class);
+        $product = $em->getRepository(\App\Entity\Products::class)
+            ->findOneBy(['name' => 'Test Product']);
+
+        $this->assertNotNull($product, 'Le produit doit exister en base après soumission du formulaire');
+        $this->assertSame('Description test', $product->getDescription());
+        $this->assertSame('https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/396e9/MainBefore.jpg', $product->getPic());
+        $this->assertSame('19.99', (string)$product->getPrice());
+        $this->assertSame(10, $product->getStock());
+
+        // Optionnel : nettoyer le produit pour ne pas polluer la DB test
+        $em->remove($product);
+        $em->flush();
+    }
+
+
+
+    public function testModifProduct(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/modif/1');
+        $this->assertResponseIsSuccessful();
+
+        $form = $crawler->selectButton('Modifier')->form([
+            'products[name]' => 'Produit test modifié',
+            'products[description]' => 'Nouvelle description',
+            'products[pic]' => 'https://example.com/image.jpg',
+            'products[price]' => '12.34',
+            'products[stock]' => '5',
+        ]);
+
+        $client->submit($form);
+        $this->assertResponseRedirects('/boutique');
+
+    }
+
+
+
+    public function testDeleteProductController(): void
+    {
+        $product = new \App\Entity\Products();
+
+        // Mock du repository
+        $repo = $this->createMock(\Doctrine\ORM\EntityRepository::class);
+        $repo->method('find')->willReturn($product);
+
+        // Mock de l'EntityManager
+        $em = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
+        $em->method('getRepository')->willReturn($repo);
+        $em->expects($this->once())->method('remove')->with($product);
+        $em->expects($this->once())->method('flush');
+
+        // Crée un container et une session "mockée"
+        $session = new Session(new MockArraySessionStorage());
+        $request = new Request();
+        $request->setSession($session);
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+
+        $container = self::getContainer();
+        $container->set('request_stack', $requestStack);
+
+        $controller = new \App\Controller\HomeController();
+        $controller->setContainer($container);
+
+        // Maintenant addFlash() fonctionne
+        $response = $controller->delete(1, $em);
+
+        $this->assertInstanceOf(\Symfony\Component\HttpFoundation\RedirectResponse::class, $response);
+        $this->assertStringContainsString('/boutique', $response->getTargetUrl());
+    }
+
+
+        /* ------------------------------------ Panier ------------------------------------ */
+
+
+
+    public function testPanierPage(): void
+    {
+        $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        $user = new User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password');
+        $user->setName('Doe');
+        $user->setFirstname('John');
+        $user->setAddress('1 rue test');
+        $user->setPostal('75000');
+        $user->setCity('Paris');
+        $user->setPhone('0600000000');
+
+        $em->persist($user);
+        $em->flush();
+
+        $client->loginUser($user);
+
+        $client->request('GET', '/panier');
+
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testAddProductCreatesCart(): void
+    {
+        $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        $user = new User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password');
+        $user->setName('Doe');
+        $user->setFirstname('John');
+        $user->setAddress('1 rue test');
+        $user->setPostal('75000');
+        $user->setCity('Paris');
+        $user->setPhone('0600000000');
+
+        $product = new Products();
+        $product->setName('Produit test');
+        $product->setDescription('Description test');
+        $product->setPic('https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/396e9/MainBefore.jpg');
+        $product->setPrice('10.00');
+        $product->setStock('8');
+
+        $em->persist($user);
+        $em->persist($product);
+        $em->flush();
+
+        $client->loginUser($user);
+
+        $client->request('GET', '/panier/add/' . $product->getId());
+
+        $this->assertResponseRedirects();
+
+        $order = $em->getRepository(Order::class)
+            ->findOneBy(['user' => $user]);
+
+        $this->assertNotNull($order);
+        $this->assertEquals(1, $order->getTotalQuantity());
+    }
+
+    public function testPanierUpdateIncrease(): void
+    {
+        $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        $user = new User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password');
+        $user->setName('Doe');
+        $user->setFirstname('John');
+        $user->setAddress('1 rue test');
+        $user->setPostal('75000');
+        $user->setCity('Paris');
+        $user->setPhone('0600000000');
+
+        $product = new Products();
+        $product->setName('Produit test');
+        $product->setDescription('Description test');
+        $product->setPic('https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/396e9/MainBefore.jpg');
+        $product->setPrice('10.00');
+        $product->setStock('8');
+
+        $order = new Order();
+        $order->setUser($user);
+        $order->setStatus('cart');
+        $order->setDate(new \DateTimeImmutable());
+        $order->setTotalQuantity(1);
+        $order->setTotalPrice('10.00');
+
+        $op = new OrderProducts();
+        $op->setOrderRef($order);
+        $op->setProducts($product);
+        $op->setQuantity(1);
+        $op->setPriceUnit('10.00');
+
+        $order->addOrderProduct($op);
+
+        $em->persist($user);
+        $em->persist($product);
+        $em->persist($order);
+        $em->persist($op);
+        $em->flush();
+
+        $client->loginUser($user);
+
+        $client->request('POST', '/panier/update/' . $op->getId(), [
+            'action' => 'increase'
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        $data = json_decode($client->getResponse()->getContent(), true);
+        $this->assertEquals(2, $data['quantity']);
+    }
+
+    public function testPanierUpdateDecrease(): void
+    {
+        $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        $user = new User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password');
+        $user->setName('Doe');
+        $user->setFirstname('John');
+        $user->setAddress('1 rue test');
+        $user->setPostal('75000');
+        $user->setCity('Paris');
+        $user->setPhone('0600000000');
+
+        $product = new Products();
+        $product->setName('Produit test');
+        $product->setDescription('Description test');
+        $product->setPic('https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/396e9/MainBefore.jpg');
+        $product->setPrice('10.00');
+        $product->setStock('8');
+
+        $order = new Order();
+        $order->setUser($user);
+        $order->setStatus('cart');
+        $order->setDate(new \DateTimeImmutable());
+        $order->setTotalQuantity(2);
+        $order->setTotalPrice('20.00');
+
+        $op = new OrderProducts();
+        $op->setOrderRef($order);
+        $op->setProducts($product);
+        $op->setQuantity(2);
+        $op->setPriceUnit('10.00');
+
+        $order->addOrderProduct($op);
+
+        $em->persist($user);
+        $em->persist($product);
+        $em->persist($order);
+        $em->persist($op);
+        $em->flush();
+
+        $client->loginUser($user);
+
+        // Décrémenter
+        $client->request('POST', '/panier/update/' . $op->getId(), [
+            'action' => 'decrease'
+        ]);
+
+        $this->assertResponseIsSuccessful();
+        $data = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(1, $data['quantity']);
+        $this->assertEquals('10.00', $data['lineTotal']);
+        $this->assertEquals(1, $data['totalQuantity']);
+        $this->assertEquals('10.00', $data['totalPrice']);
+    }
+
+    public function testPanierUpdateRemove(): void
+    {
+        $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        $user = new User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password');
+        $user->setName('Doe');
+        $user->setFirstname('John');
+        $user->setAddress('1 rue test');
+        $user->setPostal('75000');
+        $user->setCity('Paris');
+        $user->setPhone('0600000000');
+
+        $product = new Products();
+        $product->setName('Produit test');
+        $product->setDescription('Description test');
+        $product->setPic('https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/396e9/MainBefore.jpg');
+        $product->setPrice('10.00');
+        $product->setStock('8');
+
+        $order = new Order();
+        $order->setUser($user);
+        $order->setStatus('cart');
+        $order->setDate(new \DateTimeImmutable());
+        $order->setTotalQuantity(1);
+        $order->setTotalPrice('10.00');
+
+        $op = new OrderProducts();
+        $op->setOrderRef($order);
+        $op->setProducts($product);
+        $op->setQuantity(1);
+        $op->setPriceUnit('10.00');
+
+        $order->addOrderProduct($op);
+
+        $em->persist($user);
+        $em->persist($product);
+        $em->persist($order);
+        $em->persist($op);
+        $em->flush();
+
+        $orderId = $order->getId();
+
+        $client->loginUser($user);
+
+        // Supprimer
+        $client->request('POST', '/panier/update/' . $op->getId(), [
+            'action' => 'remove'
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        $data = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(0, $data['quantity']);
+        $this->assertEquals('0.00', $data['lineTotal']);
+        $this->assertEquals(0, $data['totalQuantity']);
+        $this->assertEquals('0.00', $data['totalPrice']);
+
+        // On détache tous les objets pour éviter les problèmes avec l’EntityManager
+        $em->clear();
+
+        $deletedOrder = $em->getRepository(Order::class)->find($orderId);
+        $this->assertNull($deletedOrder);
+
+    }
+
+
+
+
+    /* ------------------------------------ Historique ------------------------------------ */
+
+
+
+    public function testHistoryPage(): void
+    {
+        $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        // USER
+        $user = new User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password');
+        $user->setName('Doe');
+        $user->setFirstname('John');
+        $user->setAddress('1 rue test');
+        $user->setPostal('75000');
+        $user->setCity('Paris');
+        $user->setPhone('0600000000');
+
+        // PAID ORDER
+        $order = new Order();
+        $order->setUser($user);
+        $order->setStatus('paid'); // 🔴 IMPORTANT
+        $order->setDate(new \DateTimeImmutable());
+        $order->setTotalQuantity(2);
+        $order->setTotalPrice('20.00');
+
+        $em->persist($user);
+        $em->persist($order);
+        $em->flush();
+
+        $client->loginUser($user);
+
+        // REQUEST
+        $client->request('GET', '/history');
+
+        // ASSERTS
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('div');
+    }
+
+
+
+    
+    /* ------------------------------------ Success ------------------------------------ */
+
+
+    public function testSuccessPage(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/panier/success');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('body', 'réussi');
+    }
+
+    public function testCancelRedirectsToPanier(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/panier/cancel');
+
+        $this->assertResponseRedirects('/panier');
+    }
 }
