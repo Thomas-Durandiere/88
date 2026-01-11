@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter{% endblock %}
+
+{% block body %}
+
+     {% if is_granted("ROLE_ADMIN") %}
+        <div class="bandeauLog darkMode">
+            <a class="boutAct" href="{{ path('app_ajouter')}}" >Ajouter</a>
+            <a class="boutAct" href="{{ path('app_messages')}}" >Messages</a>
+            <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion" title="Déconnexion"></a>
+        </div>
+            {% elseif is_granted("ROLE_USER") %} 
+        <div class="bandeauLog darkMode">
+            <a class="boutAct" type="button" href="{{ path('app_panier')}}" >Panier</a>
+            <a class="boutAct" type="button" href="{{ path('app_history')}}" >Historique</a>
+            <a href="{{ path('app_logout')}}" ><img class="deco" src="{{ asset('images/logo/deco.png') }}" alt="Déconnexion" title="Déconnexion"></a>
+        </div>
+        {% endif %}
+        
+
+    <h2 id="h2Infos">Ajouter</h2>
+
+        {% for msg in app.flashes('success') %}
+            <div class="alert darkMode">
+                <span>{{ msg }}</span>
+                <button class="delete-btn">✖</button>
+            </div>
+        {% endfor %}
+
+
+    {{ form_start(form, {'attr': {'class': 'formInsc darkMode'}}) }}
+    
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.pic) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.stock) }}
+        <input type="submit" class="bout" value="Ajouter">
+
+    {{ form_end(form) }}
+
+
+    
+    <a class="HP" href="#">Haut de page</a>
+    
+{% endblock %}
