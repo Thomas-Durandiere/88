@@ -5,6 +5,10 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
+    weather_api_key: '%env(WEATHER_API_KEY)%'
+
+    photos_directory: '%kernel.project_dir%/public/images/photos'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -18,3 +22,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\Meteo:
+        arguments:
+            $weatherApiKey: '%weather_api_key%'

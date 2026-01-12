@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <head>
+    <head data-turbo="false">
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
@@ -8,52 +8,79 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
         {% block stylesheets %}
         {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+      
     </head>
-    <body>
-        <header>            
-            <img id="logo" src="{{ asset('images/logo/Logo-le88-ssfond.png') }}" alt="Logo">
-            <div id="div">
-            <h1>Le 88 Comptoir du Cheveu</h1>
-            <div id="navbar">
-                <nav>
-                    <a href="{{path('app_accueil')}}">Accueil</a>
-                    <a href="">Prestation</a>
-                    <a href="">Photos</a>
-                    <a href="">Boutique</a>
-                    <a href="">Infos/Contact</a>
-                </nav>  
-                <nav>          
-                    <a href="https://www.planity.com/le-88-comptoir-du-cheveu-17137-nieul-sur-mer"><img class="logoNavbar" src="{{ asset('images/logo/Réserver.png') }}" alt="Réserver"></a>
-                    <a href=""><img class="logoNavbar" src="{{ asset('images/logo/Compte.png') }}" alt="Connexion"></a>
-                </nav>
-            </div> 
-            </div>       
+    <body class="light {% if app.request.attributes.get('_route') == 'app_login' %}login{% endif %}">
+        <header>
+            <div id="bandeau">
+                <p>Salon de coiffure mixte 1 Rue Florence Arthaud 17137 Nieul-sur-Mer</p>
+                <p>Horaires: du Mar au Ven: 9h-19h Sam: 9h-15h</p>
+            </div>  
+            <div id="enTete">       
+                <a href="{{ path('app_accueil') }}"><img id="logo" src="{{ asset('images/logo/Logo-le88-fondAutour.png') }}" alt="Logo"></a>
+                <h1>Le 88 Comptoir du Cheveu</h1>
+                <div id="navbar">
+                    <nav class="navbar responsive">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item"><a class="lien" href="{{ path('app_accueil') }}">Accueil</a></li>
+                                <li class="nav-item"><a class="lien" href="{{ path('app_prestations') }}">Prestation</a></li>
+                                <li class="nav-item"><a class="lien" href="{{ path('app_photos') }}">Photos</a></li>
+                                <li class="nav-item"><a class="lien" href="{{ path('app_boutique') }}">Boutique</a></li>
+                                <li class="nav-item"><a class="lien" href="{{ path('app_infos') }}">Infos/Contact</a></li>
+                            </ul>
+                        </div>
+                    </nav>  
+                    <nav>          
+                        <a class="lien" href="https://www.planity.com/le-88-comptoir-du-cheveu-17137-nieul-sur-mer" target="_blank"><img class="logoNavbar" src="{{ asset('images/logo/Reserver2.png') }}" alt="Réserver"></a>
+                        <a class="lien" href="{{ path('app_login') }}"><img class="logoNavbar" src="{{ asset('images/logo/Compte2.png') }}" alt="Connexion"></a>
+                        <a class="lien" id="bouton" href=""><img id="icon" src="{{ asset('images/logo/journuit.png') }}" alt="jour/nuit" title="Jour/Nuit"></a>
+                    </nav>
+                </div>  
+            </div>    
         </header>
 
-        {% block body %}{% endblock %}
+
+            {% block body %}{% endblock %}
+
 
         <footer>
             <div id="footer">
                 <section id="mentions">
-                    <p>@88ComptoireDuCheveu</p>
-                    <a href="{{ path('app_mentions') }}">Mentions légales</a>
-                    <a href="{{ path('app_cgu') }}">CGU</a>           
+                    <div>
+                        <p>@88ComptoireDuCheveu</p>
+                    </div>
+                    <div>
+                        <a class="lien" href="{{ path('app_mentions') }}">Mentions légales</a>
+                        <a class="lien" href="{{ path('app_cgu') }}">CGU</a> 
+                    </div>          
                 </section>
                 <section id="footContact">
-                    <a id="telLogo" href="tel:+33546073679"><img src="{{ asset('images/logo/Telephone.png') }}" alt="Téléphone"></a>
-                    <a id="tel" href="tel:+33546073679">05.46.07.36.79</a>
-                    <a href="https://www.facebook.com/le88comptoirducheveu"><img src="{{ asset('images/logo/FB.png') }}" alt="Facebook"></a>
-                    <a href="https://www.instagram.com/le_88_comptoir_du_cheveu/"><img src="{{ asset('images/logo/Insta.png') }}" alt="Instagram"></a>
+                    <a class="lien" id="telLogo" href="tel:+33546073679"><img src="{{ asset('images/logo/Telephone.png') }}" alt="Téléphone"></a>
+                    <a class="lien" id="tel" href="tel:+33546073679">05.46.07.36.79</a>
+                    <a class="lien" href="https://www.facebook.com/le88comptoirducheveu" target="_blank"><img src="{{ asset('images/logo/FB.png') }}" alt="Facebook"></a>
+                    <a class="lien" href="https://www.instagram.com/le_88_comptoir_du_cheveu/" target="_blank"><img id="insta" src="{{ asset('images/logo/Insta.png') }}" alt="Instagram"></a>
                 
                 </section>
             </div>
         
         </footer>
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            <script src="https://js.stripe.com/v3/"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+            
+        {% endblock %}
     </body>
 </html>
