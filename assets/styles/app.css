@@ -661,6 +661,39 @@ iframe {
 }
 
 
+/* --------------------------- Etoiles Avis ---------------------- */
+
+
+
+.formInsc div.star-rating {
+    display: flex;
+    flex-direction: row-reverse;    
+    justify-content: flex-end;
+    padding: 20px;
+    width: fit-content;
+    background-color: white;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: gold;
+}
+.stars-display {
+    font-size: 3em;
+}
+
+
 /* --------------------------- Media Query ---------------------- */
 
 .navbar-toggler-icon {
@@ -769,3 +802,5 @@ iframe {
         padding: 0 10px !important;
     }
 }
+
+

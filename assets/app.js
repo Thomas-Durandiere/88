@@ -152,3 +152,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+
+// ----------------------- Etoiles Avis -------------------------------
+
+
+const stars = document.querySelectorAll('.star-rating label');
+const inputNote = document.querySelector('.note-hidden');
+
+stars.forEach(star => {
+  star.addEventListener('click', function() {
+    const value = this.getAttribute('for').replace('star','');
+    inputNote.value = value; // met à jour l'input Symfony caché
+  });
+});

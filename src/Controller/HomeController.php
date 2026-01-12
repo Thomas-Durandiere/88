@@ -30,13 +30,17 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Document\Avis;
+use App\Form\AvisType;
+use Doctrine\ODM\MongoDB\DocumentManager;
 
 
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_accueil')]
-    public function accueil(): Response
+    public function accueil(DocumentManager $dm): Response
     {
+
         return $this->render('accueil.html.twig', [
             'controller_name' => 'HomeController',
         ]);

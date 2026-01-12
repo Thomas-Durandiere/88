@@ -3,7 +3,27 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    {# <img class="photoCouv" src="{{ asset('images/photos/test2.PNG') }}" alt="Logo"> #}
+
+    {# <div class="bandeauAvis">
+        <ul class="affArt">
+            {% for avis in avis %}
+                <li class="contener darkMode">
+                    <strong>{{ avis.nom }}</strong>
+
+                    <div class="stars-display">
+                        {% for i in 1..5 %}
+                            {% if i <= avis.note %}
+                                <span style="color: gold;">★</span>
+                            {% else %}
+                                <span style="color: #ccc;">★</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+    </div> #}
 
     <div class="presentation">
 
