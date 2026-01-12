@@ -29,6 +29,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 final class HomeController extends AbstractController
@@ -90,6 +91,7 @@ final class HomeController extends AbstractController
     }
     
     #[Route('/photos/add', name: 'app_photosAdd')]
+    #[IsGranted('ROLE_ADMIN')]
     public function photosAdd(Request $r, EntityManagerInterface $em): Response
     {
         $photo = new Photo();
@@ -156,6 +158,7 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/ajouter', name: 'app_ajouter')]
+    #[IsGranted('ROLE_ADMIN')]
     public function ajouter(Request $request, EntityManagerInterface $em)
     {
         $product = new Products();
@@ -220,6 +223,7 @@ final class HomeController extends AbstractController
 
     
     #[Route('/panier', name: 'app_panier')]
+    #[IsGranted('ROLE_USER')]
     public function panier(OrderRepository $or, Request $r, EntityManagerInterface $em): Response
     {
 
@@ -299,7 +303,7 @@ final class HomeController extends AbstractController
         foreach ($order->getOrderProducts() as $op) {
             $quantity = (string)$op->getQuantity();
             $priceUnit = (string)$op->getPriceUnit(); // ⚠️ utiliser price_unit
-            $lineTotal = bcmul($priceUnit, $quantity, 2);
+            $lineTotal = \bcmul($priceUnit, $quantity, 2);
             $totalPrice = bcadd($totalPrice, $lineTotal, 2);
             $totalQuantity += $op->getQuantity();
         }
@@ -383,6 +387,7 @@ final class HomeController extends AbstractController
 
 
     #[Route('/history', name: 'app_history')]
+    #[IsGranted('ROLE_USER')]
     public function history(OrderRepository $or): Response
     {
 
@@ -543,7 +548,12 @@ final class HomeController extends AbstractController
         ]);
     }
 
+
+        /* ------------------------------------ Messages ------------------------------------ */
+
+
     #[Route('/messages', name: 'app_messages')]
+    #[IsGranted('ROLE_Admin')]
     public function messages(): Response
     {
         $file = $this->getParameter('kernel.project_dir') . '/var/messages/contact.json';
