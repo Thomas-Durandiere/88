@@ -17,9 +17,12 @@ RUN docker-php-ext-configure gd --with-freetype --with-webp --with-jpeg \
     && docker-php-ext-enable mongodb
 RUN a2enmod rewrite && a2enmod ssl && a2enmod socache_shmcb
 
+RUN docker-php-ext-install bcmath
+
 WORKDIR /var/www
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
+RUN pecl install xdebug && docker-php-ext-enable xdebug

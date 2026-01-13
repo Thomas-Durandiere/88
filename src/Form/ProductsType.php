@@ -21,7 +21,7 @@ class ProductsType extends AbstractType
                 'label' => 'Nom',
                 'attr' => ['class' => 'input']
                 ])
-            ->add('description', TextType::class, [
+            ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'attr' => ['class' => 'input']
                 ])

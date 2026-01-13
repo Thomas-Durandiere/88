@@ -135,10 +135,15 @@ final class HomeController extends AbstractController
     }
 
     #[route('/photo/delete/{id}', name: 'app_deletePic')]
-    public function deletePic(EntityManagerInterface $em, $id)
+    public function deletePic(Photo $photo, EntityManagerInterface $em)
     {
-        $p = $em->getRepository(Photo::class)->find($id);
-        $em->remove($p);
+        $filePath = $this->getParameter('kernel.project_dir') . '/public' . $photo->getUrl();
+        
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $em->remove($photo);
         $em->flush();
         $this->addFlash(
                 'success',
@@ -310,7 +315,7 @@ final class HomeController extends AbstractController
             $quantity = (string)$op->getQuantity();
             $priceUnit = (string)$op->getPriceUnit(); // ⚠️ utiliser price_unit
             $lineTotal = \bcmul($priceUnit, $quantity, 2);
-            $totalPrice = bcadd($totalPrice, $lineTotal, 2);
+            $totalPrice = \bcadd($totalPrice, $lineTotal, 2);
             $totalQuantity += $op->getQuantity();
         }
         $order->setTotalQuantity($totalQuantity);

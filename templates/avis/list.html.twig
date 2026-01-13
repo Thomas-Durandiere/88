@@ -4,6 +4,14 @@
 
 {% block body %}
     <h2 id="h2Infos">Liste des Avis</h2>
+
+    {% for msg in app.flashes('success') %}
+            <div class="alert darkMode">
+                <span>{{ msg }}</span>
+                <button class="delete-btn">✖</button>
+            </div>
+        {% endfor %}
+        
     <div class="boutContainer">
         <a class="boutAjoutAvis" href="{{ path('app_add_avis') }}">Ajouter un avis</a>
     </div>
