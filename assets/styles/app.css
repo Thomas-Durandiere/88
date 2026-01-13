@@ -143,6 +143,55 @@ footer {
 
 /* --------------------------- accueil ---------------------- */
 
+.bandeauAvis {
+    display: flex;    
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 1rem;
+    padding: 1rem;
+}
+.contenerAvis{
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 10px;
+    min-width: 150px;
+    flex-shrink: 0;  
+    padding: 10px;
+    list-style: none;
+}
+.contenerAvis .stars-display {
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    white-space: nowrap;
+    gap: 2px;
+}
+.boutAvis {
+    text-decoration: none;
+    background-color: white;
+    color: #2B2B2B;
+    padding: 10px 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: center;
+}
+.boutAjoutAvis {
+    text-decoration: none;
+    background-color: white;
+    color: #2B2B2B;
+    padding: 10px 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: center;
+    margin-top: 30px;
+    margin-left: 80%;
+}
+
 
 h2 {
     margin: 50px;
@@ -484,6 +533,7 @@ h3 {
     min-height: 150px;
 }
 .bout {
+    text-decoration: none;
     background-color: white;
     color: #2B2B2B;
     padding: 10px 20px;
@@ -762,6 +812,14 @@ iframe {
     }
     .contact {
         width: 70%;
+    }
+    .boutContainer {
+        text-align: center;
+    }
+    .boutAjoutAvis {
+        display: inline-block; 
+        margin-left: auto;
+        margin-right: auto;
     }
 
 }

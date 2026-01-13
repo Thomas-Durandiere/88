@@ -4,6 +4,9 @@
 
 {% block body %}
     <h2 id="h2Infos">Liste des Avis</h2>
+    <div class="boutContainer">
+        <a class="boutAjoutAvis" href="{{ path('app_add_avis') }}">Ajouter un avis</a>
+    </div>
 
     {% if avis is empty %}
         <p>Aucun avis disponible pour le moment.</p>
@@ -24,7 +27,7 @@
                         {% endfor %}
                     </div>
 
-                    <small>Posté le {{ avis.createdAt|date('d/m/Y H:i') }}</small>
+                    <small>Posté le {{ avis.createdAt|date('d/m/Y H:i', 'Europe/Paris') }}</small>
                 </li>
             {% endfor %}
         </ul>

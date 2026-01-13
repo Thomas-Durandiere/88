@@ -11,39 +11,55 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
 // ----------------------- Jour/Nuit -------------------------------
 
-let bout = document.getElementById("bouton");
-let icon = document.getElementById("iconDeco");
-let mode = document.body;
+document.addEventListener("DOMContentLoaded", function() {
+    let bout = document.getElementById("bouton");
+    let darkIcon = document.getElementById("icon");
+    let icon = document.getElementById("iconDeco");
+    let mode = document.body;
 
-let save = localStorage.getItem("theme") || "light";
- 
+    let save = localStorage.getItem("theme") || "light";
+    
     mode.classList.remove("light", "dark");
     mode.classList.add(save);
 
+    if (darkIcon) {
+        darkIcon.src = save === "dark" 
+            ? darkIcon.dataset.dark2 
+            : darkIcon.dataset.light2;
+    }
+
     if (icon) {
         icon.src = save === "dark" 
-        ? icon.dataset.dark 
-        : icon.dataset.light;
+            ? icon.dataset.dark 
+            : icon.dataset.light;
     }
 
-bout.addEventListener("click", function(e) {
-    e.preventDefault();
+    if (bout) {
+        bout.addEventListener("click", function(e) {
+            e.preventDefault();
 
-    let theme = mode.classList.contains("light") ? "dark" : "light";
+            let theme = mode.classList.contains("light") ? "dark" : "light";
 
-    mode.classList.remove("light", "dark");
-    mode.classList.add(theme);
-    
+            mode.classList.remove("light", "dark");
+            mode.classList.add(theme);
+            
+            localStorage.setItem("theme", theme);
 
-    localStorage.setItem("theme", theme);
+            if (darkIcon) {
+                darkIcon.src = theme === "dark" 
+                    ? darkIcon.dataset.dark2 
+                    : darkIcon.dataset.light2;
+            }
 
-    if (icon) {
-        icon.src = theme === "dark" 
-        ? icon.dataset.dark 
-        : icon.dataset.light;
+            if (icon) {
+                icon.src = theme === "dark" 
+                    ? icon.dataset.dark 
+                    : icon.dataset.light;
+            }
+        });
     }
-
 });
+
 
 
 

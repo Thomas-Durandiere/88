@@ -4,10 +4,11 @@
 
 {% block body %}
 
-    {# <div class="bandeauAvis">
-        <ul class="affArt">
+    
+        <ul class="bandeauAvis">
+            <a class="boutAvis" href="{{ path('app_avis_list') }}">Avis</a>
             {% for avis in avis %}
-                <li class="contener darkMode">
+                <li class="contenerAvis darkMode">
                     <strong>{{ avis.nom }}</strong>
 
                     <div class="stars-display">
@@ -22,8 +23,6 @@
                 </li>
             {% endfor %}
         </ul>
-
-    </div> #}
 
     <div class="presentation">
 

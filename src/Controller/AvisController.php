@@ -20,6 +20,7 @@ class AvisController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $avis->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
             $dm->persist($avis);
             $dm->flush();
 
@@ -36,7 +37,7 @@ class AvisController extends AbstractController
     public function avis_list(DocumentManager $dm): Response
     {
         // Récupère tous les avis avec findAll
-        $avisList = $dm->getRepository(Avis::class)->findAll([], ['createdAt' => 'DESC']);
+        $avisList = $dm->getRepository(Avis::class)->findBy([], ['createdAt' => 'DESC']);
 
         // Passe la liste des avis à la vue Twig
         return $this->render('avis/list.html.twig', [

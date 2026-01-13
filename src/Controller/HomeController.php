@@ -40,9 +40,11 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_accueil')]
     public function accueil(DocumentManager $dm): Response
     {
+        $avisList = $dm->getRepository(Avis::class)->findBy([], ['createdAt' => 'DESC']);
 
         return $this->render('accueil.html.twig', [
             'controller_name' => 'HomeController',
+            'avis' => $avisList,
         ]);
     }
 
@@ -557,13 +559,14 @@ final class HomeController extends AbstractController
 
 
     #[Route('/messages', name: 'app_messages')]
-    #[IsGranted('ROLE_Admin')]
+    #[IsGranted('ROLE_ADMIN')]
     public function messages(): Response
     {
         $file = $this->getParameter('kernel.project_dir') . '/var/messages/contact.json';
         
         if (file_exists($file)) {
-            $messages = json_decode(file_get_contents($file), true);    
+            $messages = json_decode(file_get_contents($file), true);
+            $messages = array_reverse($messages);
         } else {
             $messages = [];
         }
