@@ -6,10 +6,10 @@
 
     
         <ul class="bandeauAvis">
-            <a class="boutAvis" href="{{ path('app_avis_list') }}">Avis</a>
+            <a class="boutAvis boutResp1" href="{{ path('app_avis_list') }}">Nos avis 💬</a>
             {% for avis in avis %}
                 <li class="contenerAvis darkMode">
-                    <strong>{{ avis.nom }}</strong>
+                    <p>{{ avis.nom }}</p>
 
                     <div class="stars-display">
                         {% for i in 1..5 %}
@@ -22,6 +22,7 @@
                     </div>
                 </li>
             {% endfor %}
+            <a class="boutAvis boutResp2" href="{{ path('app_avis_list') }}">Nos avis 💬</a>
         </ul>
 
     <div class="presentation">

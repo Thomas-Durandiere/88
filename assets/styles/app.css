@@ -83,14 +83,17 @@ h1 {
 .logoNavbar {
     max-width: 50px;
     margin-right: 30px;
+    filter: drop-shadow(-3px 2px 2px black);
 }
 #icon {
     height: 45px;
     margin: auto auto;
+    filter: drop-shadow(-3px 2px 2px black);
 }
 .bouton {
     max-width: 15px;
     margin: auto auto;
+    filter: drop-shadow(-3px 2px 2px black);
 }
 
 
@@ -116,7 +119,7 @@ footer {
     color: white;
     text-shadow: -3px 2px 2px black;
     font-family: "Playfair Display";
-    font-size: 15px;
+    font-size: 20px;
     display: inline-flex;
     align-items: center;
 }
@@ -138,18 +141,23 @@ footer {
 }
 #insta {
     max-width: 40px;
+    filter: drop-shadow(-3px 2px 2px black);
+}
+#fb {
+    max-width: 50px;
+    filter: drop-shadow(-3px 2px 2px black);
 }
 
 
 /* --------------------------- accueil ---------------------- */
 
 .bandeauAvis {
-    display: flex;    
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
     gap: 1rem;
     padding: 1rem;
+    margin-top: 20px;
 }
 .contenerAvis{
     background-color: #f7f7f7;
@@ -161,23 +169,29 @@ footer {
     list-style: none;
 }
 .contenerAvis .stars-display {
-    font-size: 1.5em;
+    font-size: 1em;
     display: flex;
     justify-content: center;
     white-space: nowrap;
     gap: 2px;
 }
+.contenerAvis p {
+    font-size: 13px;
+    margin-bottom: 0;
+}   
 .boutAvis {
     text-decoration: none;
     background-color: white;
     color: #2B2B2B;
-    padding: 10px 20px;
+    padding: 2px 5px;
     border: 1px solid black;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
     align-self: center;
 }
+.boutResp1 {
+        display: none;
+    }
 .boutAjoutAvis {
     text-decoration: none;
     background-color: white;
@@ -820,6 +834,21 @@ iframe {
         display: inline-block; 
         margin-left: auto;
         margin-right: auto;
+    }
+    .bandeauAvis {        
+        margin-left: 5%;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        justify-content: flex-start;
+    }
+    .boutAvis {
+        padding: 2px 10px;
+    }
+    .boutResp1 {
+        display: block;
+    }
+    .boutResp2 {
+        display: none;
     }
 
 }

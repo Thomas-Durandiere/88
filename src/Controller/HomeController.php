@@ -40,7 +40,7 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_accueil')]
     public function accueil(DocumentManager $dm): Response
     {
-        $avisList = $dm->getRepository(Avis::class)->findBy([], ['createdAt' => 'DESC']);
+        $avisList = $dm->getRepository(Avis::class)->findBy([], ['createdAt' => 'DESC'], 5);
 
         return $this->render('accueil.html.twig', [
             'controller_name' => 'HomeController',
