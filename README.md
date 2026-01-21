@@ -1,16 +1,16 @@
-✂️ Le 88 Comptoir du Cheveu ✂️
+✂️ **Le 88 Comptoir du Cheveu** ✂️
 
 
 Site vitrine et e-boutique pour Le 88 Comptoir du Cheveu, salon de coiffure mixte avec prestations barbe et services associés. 💇‍♂️💈
 
-📄 Description
+📄 **Description**
 
 
 Ce projet propose un site complet pour un salon de coiffure classique : présentation du salon 🏪, prestations 💇‍♀️, avis clients ⭐, galerie photos 📸 et boutique en ligne 🛒.
 
 Il inclut une gestion des avis publics, un formulaire de contact 📧, une e-boutique avec paiement Stripe 💳 et un historique des commandes accessible aux clients connectés.
 
-✨ Fonctionnalités
+✨ **Fonctionnalités**
 
 
 Site vitrine : page d'accueil 🏠, présentation du salon, prestations, galerie photos 📸, informations de contact 📞.
@@ -23,7 +23,7 @@ E-boutique : page liste produits, panier 🛍️, paiement via Stripe 💳, hist
 
 Gestion des médias : photos de la galerie stockées physiquement dans public/images/photos avec URL enregistrée en base 📁.
 
-👥 Rôles et permissions
+👥 **Rôles et permissions**
 
 👤 Visiteur non connecté :
 
@@ -43,7 +43,7 @@ Peut ajouter et supprimer des photos de la galerie 📸.
 Peut consulter les messages envoyés via le formulaire de contact 📧, stockés en local.
 
 
-🛠️ Stack technique
+🛠️ **Stack technique**
 
 
 Framework : Symfony 7.3 (projet full-stack) 🐘.
@@ -61,7 +61,7 @@ Outils : phpMyAdmin pour l'administration MySQL 🛠️.
 OS dev : Windows 10, portable sur Linux/macOS/Windows via Docker 💻.
 
 
-🗃️ Modèle de données (tables principales)
+🗃️ **Modèle de données** (tables principales)
 
 
 user : Comptes, rôles ROLE_USER / ROLE_ADMIN 👤
@@ -70,7 +70,7 @@ order / order_products : Commandes et lignes liées aux produits 📦
 photos : Galerie photos (URL base, fichier public/images/photos) 📸
 
 
-📋 Prérequis
+📋 **Prérequis**
 
 
 Docker et Docker Compose 🐳.
@@ -86,7 +86,7 @@ Météo 🌤️.
 PHP/Composer local (optionnel, hors conteneur).
 
 
-🚀 Installation
+🚀 **Installation**
 
 
 Cloner :
@@ -127,7 +127,7 @@ bash
 docker compose down
 
 
-🧪 Tests
+🧪 **Tests**
 
 Test ciblé :
 
@@ -147,7 +147,7 @@ bash
 stripe listen --forward-to http://127.0.0.1:8080/stripe/webhook
 
 
-🤝 Bonnes pratiques de contribution
+🤝 **Bonnes pratiques de contribution**
 
 La branche principale de développement est main.
 La branche que j'utilise est dev.
