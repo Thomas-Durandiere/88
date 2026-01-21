@@ -42,6 +42,7 @@ Peut ajouter et supprimer des photos de la galerie 📸.
 
 Peut consulter les messages envoyés via le formulaire de contact 📧, stockés en local.
 
+
 🛠️ Stack technique
 
 
@@ -58,6 +59,7 @@ Base NoSQL : MongoDB via doctrine/mongodb-odm-bundle 📊.
 Outils : phpMyAdmin pour l'administration MySQL 🛠️.
 
 OS dev : Windows 10, portable sur Linux/macOS/Windows via Docker 💻.
+
 
 🗃️ Modèle de données (tables principales)
 
@@ -82,6 +84,7 @@ Météo 🌤️.
 
 
 PHP/Composer local (optionnel, hors conteneur).
+
 
 🚀 Installation
 
