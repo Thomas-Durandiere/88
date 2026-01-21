@@ -100,8 +100,11 @@ Installation
 Cloner le dépôt (exemple) :
 
 bash
+
 git clone https://github.com/ton-pseudo/le-88-comptoir-du-cheveu.git](https://github.com/Thomas-Durandiere/88.git
+
 cd 88
+
 ​
 2. Me contacter pour récupérer les clés API Stripe et météo (elles ne sont pas versionnées).
 ​
