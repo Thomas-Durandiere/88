@@ -45,3 +45,4 @@ php bin/phpunit --coverage-html var/coverage
 php -m | grep xdebug
 pecl install xdebug
 pecl channel-update pecl.php.net
+rm -rf var/cache/*

@@ -26,3 +26,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+RUN apt-get update && \
+    apt-get install -y ca-certificates openssl curl && \
+    update-ca-certificates && \
+    chown -R www-data:www-data /var/www/html/var
