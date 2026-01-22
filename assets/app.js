@@ -162,12 +162,32 @@ if (payButton) {
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.presta-title').forEach(title => {
+        // ARIA : transforme <h4> en bouton accessible
+        title.setAttribute('role', 'button');
+        title.setAttribute('tabindex', '0');  // clavier focus
+        title.setAttribute('aria-expanded', 'false');  // fermé par défaut (CSS none)
+
         title.addEventListener('click', () => {
             const content = title.nextElementSibling;
-            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+            const isExpanded = content.style.display === 'block';
+            
+            content.style.display = isExpanded ? 'none' : 'block';
+            
+            // ARIA update
+            title.setAttribute('aria-expanded', !isExpanded);
+            title.focus();  // focus retour
+        });
+        
+        // Clavier Entrée/Espace
+        title.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                title.click();
+            }
         });
     });
 });
+
 
 
 // ----------------------- Etoiles Avis -------------------------------
