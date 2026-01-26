@@ -2,7 +2,9 @@
 FROM php:8.3-apache
 
 RUN apt-get update \
-    && apt-get install -y build-essential curl zlib1g-dev g++ git libicu-dev zip libzip-dev libpng-dev libjpeg-dev libwebp-dev libfreetype6-dev libcurl4-openssl-dev pkg-config libssl-dev \
+    && apt-get install -y build-essential curl zlib1g-dev g++ git \
+    libicu-dev zip libzip-dev libpng-dev libjpeg-dev libwebp-dev \
+    libfreetype6-dev libcurl4-openssl-dev pkg-config libssl-dev \
     && docker-php-ext-install intl opcache pdo pdo_mysql \
     && pecl install apcu \
     && docker-php-ext-enable apcu \
