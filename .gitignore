@@ -27,3 +27,4 @@ mongodb/
 *.sock
 *.lock
 *.turtle
+/etc/

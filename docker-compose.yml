@@ -1,0 +1,47 @@
+services:
+  database:
+    container_name: database88
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: passwordbdd
+      MYSQL_DATABASE: bdd-88
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    ports:
+      - '4306:3306'
+    volumes:
+      - ./mysql:/var/lib/mysql
+  php:
+    container_name: php88
+    build:
+      context: ./php
+    ports:
+      - 8080:80
+    user: "33:33"
+    volumes:
+      - ./apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./apache/default-ssl.conf:/etc/apache2/sites-enabled/000-default-ssl.conf
+      - ./etc/ssl:/etc/ssl
+      - ./:/var/www
+         
+    depends_on:
+      - database
+  phpma:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin88
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: database
+      PMA_USER: root
+      PMA_PASSWORD: passwordbdd
+      UPLOAD_LIMIT: 20M
+    ports:
+      - 8899:80
+  mongodb:
+    container_name: mongodb88
+    image: mongo:latest
+    ports:
+      - '27018:27017'
+    volumes:
+      - ./mongodb:/data/db
+           

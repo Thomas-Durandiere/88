@@ -11,39 +11,55 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
 // ----------------------- Jour/Nuit -------------------------------
 
-let bout = document.getElementById("bouton");
-let icon = document.getElementById("iconDeco");
-let mode = document.body;
+document.addEventListener("DOMContentLoaded", function() {
+    let bout = document.getElementById("bouton");
+    let darkIcon = document.getElementById("icon");
+    let icon = document.getElementById("iconDeco");
+    let mode = document.body;
 
-let save = localStorage.getItem("theme") || "light";
- 
+    let save = localStorage.getItem("theme") || "light";
+    
     mode.classList.remove("light", "dark");
     mode.classList.add(save);
 
+    if (darkIcon) {
+        darkIcon.src = save === "dark" 
+            ? darkIcon.dataset.dark2 
+            : darkIcon.dataset.light2;
+    }
+
     if (icon) {
         icon.src = save === "dark" 
-        ? icon.dataset.dark 
-        : icon.dataset.light;
+            ? icon.dataset.dark 
+            : icon.dataset.light;
     }
 
-bout.addEventListener("click", function(e) {
-    e.preventDefault();
+    if (bout) {
+        bout.addEventListener("click", function(e) {
+            e.preventDefault();
 
-    let theme = mode.classList.contains("light") ? "dark" : "light";
+            let theme = mode.classList.contains("light") ? "dark" : "light";
 
-    mode.classList.remove("light", "dark");
-    mode.classList.add(theme);
-    
+            mode.classList.remove("light", "dark");
+            mode.classList.add(theme);
+            
+            localStorage.setItem("theme", theme);
 
-    localStorage.setItem("theme", theme);
+            if (darkIcon) {
+                darkIcon.src = theme === "dark" 
+                    ? darkIcon.dataset.dark2 
+                    : darkIcon.dataset.light2;
+            }
 
-    if (icon) {
-        icon.src = theme === "dark" 
-        ? icon.dataset.dark 
-        : icon.dataset.light;
+            if (icon) {
+                icon.src = theme === "dark" 
+                    ? icon.dataset.dark 
+                    : icon.dataset.light;
+            }
+        });
     }
-
 });
+
 
 
 
@@ -146,9 +162,43 @@ if (payButton) {
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.presta-title').forEach(title => {
+        // ARIA : transforme <h4> en bouton accessible
+        title.setAttribute('role', 'button');
+        title.setAttribute('tabindex', '0');  // clavier focus
+        title.setAttribute('aria-expanded', 'false');  // fermé par défaut (CSS none)
+
         title.addEventListener('click', () => {
             const content = title.nextElementSibling;
-            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+            const isExpanded = content.style.display === 'block';
+            
+            content.style.display = isExpanded ? 'none' : 'block';
+            
+            // ARIA update
+            title.setAttribute('aria-expanded', !isExpanded);
+            title.focus();  // focus retour
+        });
+        
+        // Clavier Entrée/Espace
+        title.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                title.click();
+            }
         });
     });
+});
+
+
+
+// ----------------------- Etoiles Avis -------------------------------
+
+
+const stars = document.querySelectorAll('.star-rating label');
+const inputNote = document.querySelector('.note-hidden');
+
+stars.forEach(star => {
+  star.addEventListener('click', function() {
+    const value = this.getAttribute('for').replace('star','');
+    inputNote.value = value; // met à jour l'input Symfony caché
+  });
 });

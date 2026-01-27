@@ -83,14 +83,17 @@ h1 {
 .logoNavbar {
     max-width: 50px;
     margin-right: 30px;
+    filter: drop-shadow(-3px 2px 2px black);
 }
 #icon {
     height: 45px;
     margin: auto auto;
+    filter: drop-shadow(-3px 2px 2px black);
 }
 .bouton {
     max-width: 15px;
     margin: auto auto;
+    filter: drop-shadow(-3px 2px 2px black);
 }
 
 
@@ -116,7 +119,7 @@ footer {
     color: white;
     text-shadow: -3px 2px 2px black;
     font-family: "Playfair Display";
-    font-size: 15px;
+    font-size: 20px;
     display: inline-flex;
     align-items: center;
 }
@@ -138,10 +141,70 @@ footer {
 }
 #insta {
     max-width: 40px;
+    filter: drop-shadow(-3px 2px 2px black);
+}
+#fb {
+    max-width: 50px;
+    filter: drop-shadow(-3px 2px 2px black);
 }
 
 
 /* --------------------------- accueil ---------------------- */
+
+.bandeauAvis {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    gap: 1rem;
+    padding: 1rem;
+    margin-top: 20px;
+}
+.contenerAvis{
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 10px;
+    min-width: 150px;
+    flex-shrink: 0;  
+    padding: 10px;
+    list-style: none;
+}
+.contenerAvis .stars-display {
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
+    white-space: nowrap;
+    gap: 2px;
+}
+.contenerAvis p {
+    font-size: 13px;
+    margin-bottom: 0;
+}   
+.boutAvis {
+    text-decoration: none;
+    background-color: white;
+    color: #2B2B2B;
+    padding: 2px 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+}
+.boutResp1 {
+        display: none;
+    }
+.boutAjoutAvis {
+    text-decoration: none;
+    background-color: white;
+    color: #2B2B2B;
+    padding: 10px 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: center;
+    margin-top: 30px;
+    margin-left: 80%;
+}
 
 
 h2 {
@@ -484,6 +547,7 @@ h3 {
     min-height: 150px;
 }
 .bout {
+    text-decoration: none;
     background-color: white;
     color: #2B2B2B;
     padding: 10px 20px;
@@ -661,6 +725,39 @@ iframe {
 }
 
 
+/* --------------------------- Etoiles Avis ---------------------- */
+
+
+
+.formInsc div.star-rating {
+    display: flex;
+    flex-direction: row-reverse;    
+    justify-content: flex-end;
+    padding: 20px;
+    width: fit-content;
+    background-color: white;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: gold;
+}
+.stars-display {
+    font-size: 3em;
+}
+
+
 /* --------------------------- Media Query ---------------------- */
 
 .navbar-toggler-icon {
@@ -730,6 +827,29 @@ iframe {
     .contact {
         width: 70%;
     }
+    .boutContainer {
+        text-align: center;
+    }
+    .boutAjoutAvis {
+        display: inline-block; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .bandeauAvis {        
+        margin-left: 5%;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        justify-content: flex-start;
+    }
+    .boutAvis {
+        padding: 2px 10px;
+    }
+    .boutResp1 {
+        display: block;
+    }
+    .boutResp2 {
+        display: none;
+    }
 
 }
 
@@ -769,3 +889,5 @@ iframe {
         padding: 0 10px !important;
     }
 }
+
+
