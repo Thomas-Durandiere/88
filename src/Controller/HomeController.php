@@ -29,15 +29,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Document\Avis;
+use App\Form\AvisType;
+use Doctrine\ODM\MongoDB\DocumentManager;
 
 
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_accueil')]
-    public function accueil(): Response
+    public function accueil(DocumentManager $dm): Response
     {
+        $avisList = $dm->getRepository(Avis::class)->findBy([], ['createdAt' => 'DESC'], 5);
+
         return $this->render('accueil.html.twig', [
             'controller_name' => 'HomeController',
+            'avis' => $avisList,
         ]);
     }
 
@@ -90,6 +97,7 @@ final class HomeController extends AbstractController
     }
     
     #[Route('/photos/add', name: 'app_photosAdd')]
+    #[IsGranted('ROLE_ADMIN')]
     public function photosAdd(Request $r, EntityManagerInterface $em): Response
     {
         $photo = new Photo();
@@ -127,10 +135,15 @@ final class HomeController extends AbstractController
     }
 
     #[route('/photo/delete/{id}', name: 'app_deletePic')]
-    public function deletePic(EntityManagerInterface $em, $id)
+    public function deletePic(Photo $photo, EntityManagerInterface $em)
     {
-        $p = $em->getRepository(Photo::class)->find($id);
-        $em->remove($p);
+        $filePath = $this->getParameter('kernel.project_dir') . '/public' . $photo->getUrl();
+        
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $em->remove($photo);
         $em->flush();
         $this->addFlash(
                 'success',
@@ -156,6 +169,7 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/ajouter', name: 'app_ajouter')]
+    #[IsGranted('ROLE_ADMIN')]
     public function ajouter(Request $request, EntityManagerInterface $em)
     {
         $product = new Products();
@@ -220,6 +234,7 @@ final class HomeController extends AbstractController
 
     
     #[Route('/panier', name: 'app_panier')]
+    #[IsGranted('ROLE_USER')]
     public function panier(OrderRepository $or, Request $r, EntityManagerInterface $em): Response
     {
 
@@ -299,8 +314,8 @@ final class HomeController extends AbstractController
         foreach ($order->getOrderProducts() as $op) {
             $quantity = (string)$op->getQuantity();
             $priceUnit = (string)$op->getPriceUnit(); // ⚠️ utiliser price_unit
-            $lineTotal = bcmul($priceUnit, $quantity, 2);
-            $totalPrice = bcadd($totalPrice, $lineTotal, 2);
+            $lineTotal = \bcmul($priceUnit, $quantity, 2);
+            $totalPrice = \bcadd($totalPrice, $lineTotal, 2);
             $totalQuantity += $op->getQuantity();
         }
         $order->setTotalQuantity($totalQuantity);
@@ -383,6 +398,7 @@ final class HomeController extends AbstractController
 
 
     #[Route('/history', name: 'app_history')]
+    #[IsGranted('ROLE_USER')]
     public function history(OrderRepository $or): Response
     {
 
@@ -543,13 +559,19 @@ final class HomeController extends AbstractController
         ]);
     }
 
+
+        /* ------------------------------------ Messages ------------------------------------ */
+
+
     #[Route('/messages', name: 'app_messages')]
+    #[IsGranted('ROLE_ADMIN')]
     public function messages(): Response
     {
         $file = $this->getParameter('kernel.project_dir') . '/var/messages/contact.json';
         
         if (file_exists($file)) {
-            $messages = json_decode(file_get_contents($file), true);    
+            $messages = json_decode(file_get_contents($file), true);
+            $messages = array_reverse($messages);
         } else {
             $messages = [];
         }

@@ -8,6 +8,8 @@ parameters:
     weather_api_key: '%env(WEATHER_API_KEY)%'
 
     photos_directory: '%kernel.project_dir%/public/images/photos'
+    env(MONGODB_URI): ''
+    env(MONGODB_DB): ''
 
 services:
     # default configuration for services in *this* file

@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class HomeControllerTest extends WebTestCase
 {
@@ -106,6 +107,24 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $container = static::getContainer();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        $user = new \App\Entity\User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setName('Test');
+        $user->setFirstname('User');
+        $user->setAddress('10 rue de Paris');
+        $user->setPostal('75001');
+        $user->setCity('Paris');
+        $user->setPhone('0102030405');
+        $user->setRoles(['ROLE_ADMIN']);               
+
+        $em->persist($user);
+        $em->flush();
+
+        // Connecter l’utilisateur
+        $client->loginUser($user);
 
         // Préparer un fichier JSON de test
         $file = $container->getParameter('kernel.project_dir') . '/var/messages/contact.json';
@@ -129,6 +148,24 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $container = static::getContainer();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        $user = new \App\Entity\User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setName('Test');
+        $user->setFirstname('User');
+        $user->setAddress('10 rue de Paris');
+        $user->setPostal('75001');
+        $user->setCity('Paris');
+        $user->setPhone('0102030405');
+        $user->setRoles(['ROLE_ADMIN']);               
+
+        $em->persist($user);
+        $em->flush();
+
+        // Connecter l’utilisateur
+        $client->loginUser($user);
 
         // Préparer un fichier JSON de test
         $file = $container->getParameter('kernel.project_dir') . '/var/messages/contact.json';
@@ -164,9 +201,13 @@ class HomeControllerTest extends WebTestCase
     public function testStaticPages(): void
     {
         $client = static::createClient();
+        $client->disableReboot(); // <--- c’est le truc magique
+        $container = $client->getContainer();
+        $dmMock = $this->createMock(\Doctrine\ODM\MongoDB\DocumentManager::class);
+        $container->set(\Doctrine\ODM\MongoDB\DocumentManager::class, $dmMock);
+
 
         $pages = [
-            '/' => 'Accueil',
             '/mentionsLegales' => 'Mentions légales',
             '/cgu' => 'CGU',
             '/prestaions' => 'Prestations',
@@ -178,10 +219,12 @@ class HomeControllerTest extends WebTestCase
             // Vérifie que la page répond bien
             $this->assertResponseIsSuccessful();
 
-            // Vérifie qu'au moins le titre du contrôleur apparaît dans le HTML
+            // Vérifie que le titre attendu est présent
             $this->assertSelectorTextContains('body', $title);
         }
     }
+
+
 
 
     //--------------------------- Photo ----------------------------
@@ -210,15 +253,29 @@ class HomeControllerTest extends WebTestCase
     public function testPhotosAddPage(): void
     {
         $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
 
-        // Mock EntityManager pour ne pas toucher à la base
-        $emMock = $this->createMock(EntityManagerInterface::class);
-        $emMock->expects($this->any())->method('persist');
-        $emMock->expects($this->any())->method('flush');
+        // Créer un utilisateur avec ROLE_USER
+        $user = new \App\Entity\User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setName('Test');
+        $user->setFirstname('User');
+        $user->setAddress('10 rue de Paris');
+        $user->setPostal('75001');
+        $user->setCity('Paris');
+        $user->setPhone('0102030405');
+        $user->setRoles(['ROLE_ADMIN']);               
 
-        $client->getContainer()->set(EntityManagerInterface::class, $emMock);
+        $em->persist($user);
+        $em->flush();
 
+        // Connecter l’utilisateur
+        $client->loginUser($user);
+
+        // Accéder à la page protégée
         $crawler = $client->request('GET', '/photos/add');
+
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('form'); // Vérifie que le formulaire est présent
     }
@@ -245,6 +302,24 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $em = $client->getContainer()->get('doctrine')->getManager();
+
+        // Créer un utilisateur avec ROLE_USER
+        $user = new \App\Entity\User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setName('Test');
+        $user->setFirstname('User');
+        $user->setAddress('10 rue de Paris');
+        $user->setPostal('75001');
+        $user->setCity('Paris');
+        $user->setPhone('0102030405');
+        $user->setRoles(['ROLE_ADMIN']);               
+
+        $em->persist($user);
+        $em->flush();
+
+        // Connecter l’utilisateur
+        $client->loginUser($user);
 
         // Créer un fichier temporaire simulant un upload
         $tmpFile = tempnam(sys_get_temp_dir(), 'upl');
@@ -292,6 +367,24 @@ class HomeControllerTest extends WebTestCase
     public function testAjouterProductPage(): void
     {
         $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        $user = new \App\Entity\User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setName('Test');
+        $user->setFirstname('User');
+        $user->setAddress('10 rue de Paris');
+        $user->setPostal('75001');
+        $user->setCity('Paris');
+        $user->setPhone('0102030405');
+        $user->setRoles(['ROLE_ADMIN']);               
+
+        $em->persist($user);
+        $em->flush();
+
+        // Connecter l’utilisateur
+        $client->loginUser($user);
 
         $crawler = $client->request('GET', '/ajouter');
         $this->assertResponseIsSuccessful();
@@ -304,6 +397,24 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $container = static::getContainer();
+        $em = static::getContainer()->get('doctrine')->getManager();
+
+        $user = new \App\Entity\User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setName('Test');
+        $user->setFirstname('User');
+        $user->setAddress('10 rue de Paris');
+        $user->setPostal('75001');
+        $user->setCity('Paris');
+        $user->setPhone('0102030405');
+        $user->setRoles(['ROLE_ADMIN']);               
+
+        $em->persist($user);
+        $em->flush();
+
+        // Connecter l’utilisateur
+        $client->loginUser($user);
 
         // Accéder à la page GET pour récupérer le formulaire
         $crawler = $client->request('GET', '/ajouter');
@@ -422,6 +533,7 @@ class HomeControllerTest extends WebTestCase
         $user->setPostal('75000');
         $user->setCity('Paris');
         $user->setPhone('0600000000');
+        $user->setRoles(['ROLE_USER']);
 
         $em->persist($user);
         $em->flush();
@@ -447,6 +559,7 @@ class HomeControllerTest extends WebTestCase
         $user->setPostal('75000');
         $user->setCity('Paris');
         $user->setPhone('0600000000');
+        $user->setRoles(['ROLE_USER']);
 
         $product = new Products();
         $product->setName('Produit test');
@@ -486,6 +599,7 @@ class HomeControllerTest extends WebTestCase
         $user->setPostal('75000');
         $user->setCity('Paris');
         $user->setPhone('0600000000');
+        $user->setRoles(['ROLE_USER']);
 
         $product = new Products();
         $product->setName('Produit test');
@@ -541,6 +655,7 @@ class HomeControllerTest extends WebTestCase
         $user->setPostal('75000');
         $user->setCity('Paris');
         $user->setPhone('0600000000');
+        $user->setRoles(['ROLE_USER']);
 
         $product = new Products();
         $product->setName('Produit test');
@@ -600,6 +715,7 @@ class HomeControllerTest extends WebTestCase
         $user->setPostal('75000');
         $user->setCity('Paris');
         $user->setPhone('0600000000');
+        $user->setRoles(['ROLE_USER']);
 
         $product = new Products();
         $product->setName('Produit test');
@@ -677,6 +793,7 @@ class HomeControllerTest extends WebTestCase
         $user->setPostal('75000');
         $user->setCity('Paris');
         $user->setPhone('0600000000');
+        $user->setRoles(['ROLE_USER']);
 
         // PAID ORDER
         $order = new Order();

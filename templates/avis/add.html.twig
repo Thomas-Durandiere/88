@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter-Avis{% endblock %}
+
+{% block body %}
+    <h2 id="h2Infos">Donnez votre avis</h2>
+
+    {{ form_start(form, {'attr': {'class': 'formInsc darkMode'}}) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.message) }}
+
+        <label>Note :</label>
+        <div class="star-rating">
+            {% for i in 5..1 %}
+                <input type="radio" id="star{{ i }}" name="note" value="{{ i }}">
+                <label for="star{{ i }}">★</label>
+            {% endfor %}
+        </div>
+
+        {{ form_widget(form.note, { 'attr': { 'style': 'display:none;' } }) }}
+
+    {{ form_end(form) }}
+
+    
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis{% endblock %}
+
+{% block meta_description %}Avis clients Le 88 Comptoir du Cheveu Nieul-sur-Mer. Découvrez les témoignages sur nos prestations coiffure mixte{% endblock %}
+
+{% block body %}
+    <h2 id="h2Infos">Liste des Avis</h2>
+
+    {% for msg in app.flashes('success') %}
+            <div class="alert darkMode">
+                <span>{{ msg }}</span>
+                <button class="delete-btn">✖</button>
+            </div>
+        {% endfor %}
+        
+    <div class="boutContainer">
+        <a class="boutAjoutAvis" href="{{ path('app_add_avis') }}">Ajouter un avis</a>
+    </div>
+
+    {% if avis is empty %}
+        <p>Aucun avis disponible pour le moment.</p>
+    {% else %}
+        <ul class="affArt">
+            {% for avis in avis %}
+                <li class="contener darkMode">
+                    <p><strong>{{ avis.nom }}</strong> a dit : </p>
+                    <p>{{ avis.message }}</p>
+
+                    <div class="stars-display">
+                        {% for i in 1..5 %}
+                            {% if i <= avis.note %}
+                                <span style="color: gold;">★</span>
+                            {% else %}
+                                <span style="color: #ccc;">★</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <small>Posté le {{ avis.createdAt|date('d/m/Y H:i', 'Europe/Paris') }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

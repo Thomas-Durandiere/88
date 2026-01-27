@@ -2,8 +2,30 @@
 
 {% block title %}Accueil{% endblock %}
 
+{% block meta_description %}Accueil Le 88 : prestations coiffure, avis clients, RDV{% endblock %}
+
 {% block body %}
-    {# <img class="photoCouv" src="{{ asset('images/photos/test2.PNG') }}" alt="Logo"> #}
+
+    
+        <ul class="bandeauAvis">
+            <a class="boutAvis boutResp1" href="{{ path('app_avis_list') }}">Nos avis 💬</a>
+            {% for avis in avis %}
+                <li class="contenerAvis darkMode">
+                    <p>{{ avis.nom }}</p>
+
+                    <div class="stars-display">
+                        {% for i in 1..5 %}
+                            {% if i <= avis.note %}
+                                <span style="color: gold;">★</span>
+                            {% else %}
+                                <span style="color: #ccc;">★</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </li>
+            {% endfor %}
+            <a class="boutAvis boutResp2" href="{{ path('app_avis_list') }}">Nos avis 💬</a>
+        </ul>
 
     <div class="presentation">
 
