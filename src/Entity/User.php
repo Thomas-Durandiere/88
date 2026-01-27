@@ -54,6 +54,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $accepteCGV = null;    
+    
+
     /**
      * @var Collection<int, Order>
      */
@@ -209,6 +213,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+        return $this;
+    }
+
+    /** @return bool|null */
+    public function getAccepteCGV(): ?bool
+    {
+        return $this->accepteCGV;
+    }
+
+    /** @param bool $accepteCGV */
+    public function setAccepteCGV(bool $accepteCGV): static
+    {
+        $this->accepteCGV = $accepteCGV;
         return $this;
     }
 

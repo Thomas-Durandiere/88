@@ -46,3 +46,8 @@ php -m | grep xdebug
 pecl install xdebug
 pecl channel-update pecl.php.net
 rm -rf var/cache/*
+doctrine:migrations:diff
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:status
+php bin/console doctrine:migrations:migrate
+php bin/console doctrine:migrations:status

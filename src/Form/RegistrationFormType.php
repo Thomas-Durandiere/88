@@ -45,10 +45,11 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Please enter a password',
                     ]),
                     new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'min' => 8,
+                        'minMessage' => 'Votre mot de passe doit faire au moins {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                        'max' => 25,
+                        'maxMessage' => 'Votre mot de passe ne peut pas dépasser {{ limit }} characters',
                     ]),
                 ],
             ])
@@ -68,10 +69,9 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Téléphone',
                 'attr' => ['class' => 'input']
                 ])
-            ->add('agreeTerms', CheckboxType::class, [
+            ->add('accepteCGV', CheckboxType::class, [
                 'label' => "J'accepte les conditions d'utilisation",
                 'row_attr' => ['class' => 'checkBox'],
-                'mapped' => false,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepter nos conditions ',
