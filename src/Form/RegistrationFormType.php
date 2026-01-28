@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
@@ -45,11 +46,15 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Please enter a password',
                     ]),
                     new Length([
-                        'min' => 8,
+                        'min' => 12,
                         'minMessage' => 'Votre mot de passe doit faire au moins {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
                         'max' => 25,
                         'maxMessage' => 'Votre mot de passe ne peut pas dépasser {{ limit }} characters',
+                    ]),
+                    new Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^ a-zA-Z0-9]).{8,}$/',
+                        'message' => 'Votre mot de passe doit contenir au moins : une lettre minuscule, une lettre majuscule, un chiffre et un caractère spécial.',
                     ]),
                 ],
             ])
