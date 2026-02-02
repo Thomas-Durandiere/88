@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
@@ -42,13 +43,17 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Mot de passe',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Veuillez entrer un mot de passe',
                     ]),
                     new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                        'min' => 12,
+                        'minMessage' => 'Votre mot de passe doit faire au moins {{ limit }} characters',
+                        'max' => 25,
+                        'maxMessage' => 'Votre mot de passe ne peut pas dépasser {{ limit }} characters',
+                    ]),
+                    new Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^ a-zA-Z0-9]).{12,}$/',
+                        'message' => 'Votre mot de passe doit contenir au moins : une lettre minuscule, une lettre majuscule, un chiffre et un caractère spécial.',
                     ]),
                 ],
             ])
@@ -68,10 +73,9 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Téléphone',
                 'attr' => ['class' => 'input']
                 ])
-            ->add('agreeTerms', CheckboxType::class, [
+            ->add('accepteCGV', CheckboxType::class, [
                 'label' => "J'accepte les conditions d'utilisation",
                 'row_attr' => ['class' => 'checkBox'],
-                'mapped' => false,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepter nos conditions ',
