@@ -31,5 +31,5 @@ RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 RUN apt-get update && \
     apt-get install -y ca-certificates openssl curl && \
-    update-ca-certificates && \
-    chown -R www-data:www-data /var/www/html/var
+    update-ca-certificates
+    # chown -R www-data:www-data /var/www/var

@@ -111,7 +111,7 @@ class HomeControllerTest extends WebTestCase
 
         $user = new \App\Entity\User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setPassword('TestAt6a3jkd!'); // ou hashé si nécessaire
         $user->setName('Test');
         $user->setFirstname('User');
         $user->setAddress('10 rue de Paris');
@@ -152,7 +152,7 @@ class HomeControllerTest extends WebTestCase
 
         $user = new \App\Entity\User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setPassword('TestAt6a3jkd!'); // ou hashé si nécessaire
         $user->setName('Test');
         $user->setFirstname('User');
         $user->setAddress('10 rue de Paris');
@@ -258,7 +258,7 @@ class HomeControllerTest extends WebTestCase
         // Créer un utilisateur avec ROLE_USER
         $user = new \App\Entity\User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setPassword('TestAt6a3jkd!'); // ou hashé si nécessaire
         $user->setName('Test');
         $user->setFirstname('User');
         $user->setAddress('10 rue de Paris');
@@ -306,7 +306,7 @@ class HomeControllerTest extends WebTestCase
         // Créer un utilisateur avec ROLE_USER
         $user = new \App\Entity\User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setPassword('TestAt6a3jkd!'); // ou hashé si nécessaire
         $user->setName('Test');
         $user->setFirstname('User');
         $user->setAddress('10 rue de Paris');
@@ -371,7 +371,7 @@ class HomeControllerTest extends WebTestCase
 
         $user = new \App\Entity\User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setPassword('TestAt6a3jkd!'); // ou hashé si nécessaire
         $user->setName('Test');
         $user->setFirstname('User');
         $user->setAddress('10 rue de Paris');
@@ -401,7 +401,7 @@ class HomeControllerTest extends WebTestCase
 
         $user = new \App\Entity\User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password'); // ou hashé si nécessaire
+        $user->setPassword('TestAt6a3jkd!'); // ou hashé si nécessaire
         $user->setName('Test');
         $user->setFirstname('User');
         $user->setAddress('10 rue de Paris');
@@ -462,6 +462,24 @@ class HomeControllerTest extends WebTestCase
     public function testModifProduct(): void
     {
         $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+        
+        $user = new User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('TestAt6a3jkd!');
+        $user->setName('Doe');
+        $user->setFirstname('John');
+        $user->setAddress('1 rue test');
+        $user->setPostal('75000');
+        $user->setCity('Paris');
+        $user->setPhone('0600000000');
+        $user->setRoles(['ROLE_ADMIN']);
+
+        $em->persist($user);
+        $em->flush();
+
+        $client->loginUser($user);
+
         $crawler = $client->request('GET', '/modif/1');
         $this->assertResponseIsSuccessful();
 
@@ -526,7 +544,7 @@ class HomeControllerTest extends WebTestCase
 
         $user = new User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password');
+        $user->setPassword('TestAt6a3jkd!');
         $user->setName('Doe');
         $user->setFirstname('John');
         $user->setAddress('1 rue test');
@@ -552,7 +570,7 @@ class HomeControllerTest extends WebTestCase
 
         $user = new User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password');
+        $user->setPassword('TestAt6a3jkd!');
         $user->setName('Doe');
         $user->setFirstname('John');
         $user->setAddress('1 rue test');
@@ -592,7 +610,7 @@ class HomeControllerTest extends WebTestCase
 
         $user = new User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password');
+        $user->setPassword('TestAt6a3jkd!');
         $user->setName('Doe');
         $user->setFirstname('John');
         $user->setAddress('1 rue test');
@@ -648,7 +666,7 @@ class HomeControllerTest extends WebTestCase
 
         $user = new User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password');
+        $user->setPassword('TestAt6a3jkd!');
         $user->setName('Doe');
         $user->setFirstname('John');
         $user->setAddress('1 rue test');
@@ -708,7 +726,7 @@ class HomeControllerTest extends WebTestCase
 
         $user = new User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password');
+        $user->setPassword('TestAt6a3jkd!');
         $user->setName('Doe');
         $user->setFirstname('John');
         $user->setAddress('1 rue test');
@@ -786,7 +804,7 @@ class HomeControllerTest extends WebTestCase
         // USER
         $user = new User();
         $user->setEmail('user_' . uniqid() . '@test.fr');
-        $user->setPassword('password');
+        $user->setPassword('TestAt6a3jkd!');
         $user->setName('Doe');
         $user->setFirstname('John');
         $user->setAddress('1 rue test');
@@ -826,6 +844,23 @@ class HomeControllerTest extends WebTestCase
     public function testSuccessPage(): void
     {
         $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+        
+        $user = new User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('TestAt6a3jkd!');
+        $user->setName('Doe');
+        $user->setFirstname('John');
+        $user->setAddress('1 rue test');
+        $user->setPostal('75000');
+        $user->setCity('Paris');
+        $user->setPhone('0600000000');
+        $user->setRoles(['ROLE_ADMIN']);
+
+        $em->persist($user);
+        $em->flush();
+
+        $client->loginUser($user);
 
         $client->request('GET', '/panier/success');
 
@@ -836,6 +871,23 @@ class HomeControllerTest extends WebTestCase
     public function testCancelRedirectsToPanier(): void
     {
         $client = static::createClient();
+        $em = static::getContainer()->get('doctrine')->getManager();
+        
+        $user = new User();
+        $user->setEmail('user_' . uniqid() . '@test.fr');
+        $user->setPassword('TestAt6a3jkd!');
+        $user->setName('Doe');
+        $user->setFirstname('John');
+        $user->setAddress('1 rue test');
+        $user->setPostal('75000');
+        $user->setCity('Paris');
+        $user->setPhone('0600000000');
+        $user->setRoles(['ROLE_ADMIN']);
+
+        $em->persist($user);
+        $em->flush();
+
+        $client->loginUser($user);
 
         $client->request('GET', '/panier/cancel');
 

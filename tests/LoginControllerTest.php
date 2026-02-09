@@ -32,21 +32,28 @@ class LoginControllerTest extends WebTestCase
         $passwordHasher = $container->get('security.user_password_hasher');
 
         // $user = (new User())->setEmail('email@example.com');
-        // $user->setPassword($passwordHasher->hashPassword($user, 'password'));
+        // $user->setPassword($passwordHasher->hashPassword($user, 'TestAt6a3jkd!'));
 
         // créer un utilisateur complet
             $user = (new User())
                 ->setEmail('email@example.com')
                 ->setName('Dupont')
                 ->setFirstname('Jean')
-                ->setPassword(
-                    $passwordHasher->hashPassword($user, 'password')
-                )
                 ->setRoles(['ROLE_USER'])
                 ->setAddress('10 rue de Paris')
                 ->setPostal('75001')
                 ->setCity('Paris')
                 ->setPhone('0102030405');
+
+                // ->setPassword(
+                //     $passwordHasher->hashPassword($user, 'TestAt6a3jkd!')
+                // );
+
+                // 2. Hash SÉPARÉ (user existe)
+                $hashedPassword = $passwordHasher->hashPassword($user, 'TestAt6a3jkd!');
+
+                // 3. Set password
+                $user->setPassword($hashedPassword);
 
             $em->persist($user);
             $em->flush();
@@ -60,14 +67,14 @@ class LoginControllerTest extends WebTestCase
 
         $this->client->submitForm('Envoyer', [
             '_username' => 'doesNotExist@example.com',
-            '_password' => 'password',
+            '_password' => 'TestAt6a3jkd!',
         ]);
 
         self::assertResponseRedirects('/login');
         $this->client->followRedirect();
 
         // Ensure we do not reveal if the user exists or not.
-        self::assertSelectorTextContains('.alert-danger', 'Invalid credentials.');
+        self::assertSelectorTextContains('.alert-danger', 'Email ou mot de passe incorrect.');
 
         // Denied - Can't login with invalid password.
         $this->client->request('GET', '/login');
@@ -82,12 +89,12 @@ class LoginControllerTest extends WebTestCase
         $this->client->followRedirect();
 
         // Ensure we do not reveal the user exists but the password is wrong.
-        self::assertSelectorTextContains('.alert-danger', 'Invalid credentials.');
+        self::assertSelectorTextContains('.alert-danger', 'Email ou mot de passe incorrect.');
 
         // Success - Login with valid credentials is allowed.
         $this->client->submitForm('Envoyer', [
             '_username' => 'email@example.com',
-            '_password' => 'password',
+            '_password' => 'TestAt6a3jkd!',
         ]);
 
         self::assertResponseRedirects('/boutique');
