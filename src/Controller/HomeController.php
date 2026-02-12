@@ -65,7 +65,7 @@ final class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/prestaions', name: 'app_prestations')]
+    #[Route('/prestations', name: 'app_prestations')]
     public function prestations(): Response
     {
         return $this->render('prestations.html.twig', [

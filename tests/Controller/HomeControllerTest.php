@@ -210,7 +210,7 @@ class HomeControllerTest extends WebTestCase
         $pages = [
             '/mentionsLegales' => 'Mentions légales',
             '/cgu' => 'CGU',
-            '/prestaions' => 'Prestations',
+            '/prestations' => 'Prestations',
         ];
 
         foreach ($pages as $url => $title) {

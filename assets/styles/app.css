@@ -151,6 +151,11 @@ footer {
 
 /* --------------------------- accueil ---------------------- */
 
+.messCmd {
+    font-size: 1.2em;
+    margin-left: 40px;
+    margin-top: 30px;
+}
 .bandeauAvis {
     display: flex;
     justify-content: center;
