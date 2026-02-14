@@ -33,6 +33,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Document\Avis;
 use App\Form\AvisType;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
 final class HomeController extends AbstractController
@@ -64,7 +65,7 @@ final class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/prestaions', name: 'app_prestations')]
+    #[Route('/prestations', name: 'app_prestations')]
     public function prestations(): Response
     {
         return $this->render('prestations.html.twig', [
@@ -510,7 +511,7 @@ final class HomeController extends AbstractController
 
 
     #[Route('/infos', name: 'app_infos')]
-    public function infos(Request $request, Meteo $meteo): Response
+    public function infos(Request $request, Meteo $meteo, HttpClientInterface $client): Response
     {
         $form = $this->createForm(ContactType::class, null, [
             'attr' => [
@@ -551,6 +552,11 @@ final class HomeController extends AbstractController
 
         try {
             $weather = $meteo->getWeather('Nieul-sur-Mer');
+            // $weather = $client->request(
+            // 'GET',
+            // 'https://www.prevision-meteo.ch/services/json/Nieul-sur-Mer');
+            // var_dump($weather);
+            // die("stop");
         } catch (\Throwable $e) {}
 
         return $this->render('infos.html.twig', [

@@ -151,6 +151,11 @@ footer {
 
 /* --------------------------- accueil ---------------------- */
 
+.messCmd {
+    font-size: 1.2em;
+    margin-left: 40px;
+    margin-top: 30px;
+}
 .bandeauAvis {
     display: flex;
     justify-content: center;
@@ -722,6 +727,19 @@ iframe {
 #lienInsc {
     margin: auto;
     text-decoration: none;
+}
+.alert.alert-danger {
+    background-color: #f7f7f7;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    width: auto;
+    height: 45px;
+    margin-left: 30px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 

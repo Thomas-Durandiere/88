@@ -51,3 +51,6 @@ php bin/console doctrine:migrations:diff
 php bin/console doctrine:migrations:status
 php bin/console doctrine:migrations:migrate
 php bin/console doctrine:migrations:status
+apt-get update
+apt-get install -y ca-certificates
+update-ca-certificates

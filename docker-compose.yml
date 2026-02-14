@@ -16,8 +16,8 @@ services:
     build:
       context: ./php
     ports:
-      - 8080:80
-    user: "33:33"
+      - 8081:80
+    user: "0:0"
     volumes:
       - ./apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
       - ./apache/default-ssl.conf:/etc/apache2/sites-enabled/000-default-ssl.conf

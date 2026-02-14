@@ -20,6 +20,8 @@
             <a href="{{ path('app_logout')}}" ><img class="deco" id="iconDeco" src="{{ asset('images/logo/deco.png') }}" data-light="{{ asset('images/logo/deco.png') }}" 
                 data-dark="{{ asset('images/logo/decoB.png') }}" alt="Déconnexion" title="Déconnexion"></a>
         </div>
+            {% else %}
+            <p class="messCmd">Pour commander, merci de vous inscrire / vous connecter</p>
         {% endif %}
 
     <h2 id="h2Infos">Boutique</h2>
@@ -37,7 +39,7 @@
         <div class="contener darkMode">
             <div class="cardArt">
                 <h3> {{ product.name }} </h3>
-                <img src=" {{ product.pic }} ">
+                <img src=" {{ product.pic }} " alt=" {{ product.name }} ">
                 <p>{{ product.description }}</p>
                 <p>{{ product.price }} €</p>
                 <p>Quantité en stock: {{ product.stock }}</p>
