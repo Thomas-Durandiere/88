@@ -28,3 +28,7 @@ mongodb/
 *.lock
 *.turtle
 /etc/
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

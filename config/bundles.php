@@ -15,5 +15,5 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle::class => ['dev' => true, 'prod' => true],
-
+    Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
 ];

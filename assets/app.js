@@ -22,13 +22,13 @@ document.addEventListener("DOMContentLoaded", function() {
     mode.classList.remove("light", "dark");
     mode.classList.add(save);
 
-    if (darkIcon) {
+    if (darkIcon) {     // icone jour/nuit
         darkIcon.src = save === "dark" 
             ? darkIcon.dataset.dark2 
             : darkIcon.dataset.light2;
     }
 
-    if (icon) {
+    if (icon) {     // icone logout
         icon.src = save === "dark" 
             ? icon.dataset.dark 
             : icon.dataset.light;
@@ -45,13 +45,13 @@ document.addEventListener("DOMContentLoaded", function() {
             
             localStorage.setItem("theme", theme);
 
-            if (darkIcon) {
+            if (darkIcon) {     // icnne jour/nuit
                 darkIcon.src = theme === "dark" 
                     ? darkIcon.dataset.dark2 
                     : darkIcon.dataset.light2;
             }
 
-            if (icon) {
+            if (icon) {     // icone logout
                 icon.src = theme === "dark" 
                     ? icon.dataset.dark 
                     : icon.dataset.light;
