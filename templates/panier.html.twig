@@ -23,6 +23,8 @@
 
     <h2 id="h2Infos">Panier</h2>
 
+    <p class="messCmd">Commande à venir chercher au salon</p>
+
     <div class="affPanier">        
 
         {% if panier is not null and panier.getOrderProducts is not empty %}
@@ -33,14 +35,14 @@
             
                 <div class="panierArt darkMode" data-op-id="{{ op.id }}">
                     <div class="cardPanier">
-                        <img src="{{ op.getProducts.pic }}">
+                        <img src="{{ op.getProducts.pic }}" alt="{{ op.getProducts.name }}">
                         <h3>{{ op.getProducts.name }}</h3>
                         <p>{{ op.getPriceUnit }} €</p>
-                        <button class="quantitySup" data-op-id="{{ op.id }}">🗑️</button>
-                        <button class="quantityM" data-op-id="{{ op.id }}">-</button>
-                        <span class="quantity">{{ op.getQuantity }}</span>
-                        <button class="quantityP" data-op-id="{{ op.id }}">+</button>
-                        <p class="line-total">{{ (op.getQuantity * op.getPriceUnit)|number_format(2, '.', ',') }} €</p>
+                        <button class="quantitySup incre" data-op-id="{{ op.id }}" aria-label="Supprimer {{ op.getProducts.name }} du panier">🗑️</button>
+                        <button class="quantityM incre" data-op-id="{{ op.id }}" aria-label="Diminuer la quantité de {{ op.getProducts.name }} (actuel : {{ op.getQuantity }})">-</button>
+                        <span class="quantity" aria-live="polite">{{ op.getQuantity }}</span>
+                        <button class="quantityP incre" data-op-id="{{ op.id }}" aria-label="Augmenter la quantité de {{ op.getProducts.name }} (actuel : {{ op.getQuantity }})">+</button>
+                        <p class="line-total" aria-live="polite">{{ (op.getQuantity * op.getPriceUnit)|number_format(2, '.', ',') }} €</p>
                     </div>
                 </div>
                 {% endfor %}
@@ -51,7 +53,7 @@
                 <p>Total nombre d'articles : <span class="total-quantity">{{ panier.totalQuantity }} </span></p> <br>
                 <p>Prix total:  <span class="total-price">{{ panier.totalPrice }} € </span></p>
 
-                <h3 class="h3Livr">Adresse de livraison</h3>
+                <h3 class="h3Livr">Adresse de facturation</h3>
                 <div class="addressForm">
                 {{ form_start(addressForm) }}
                     

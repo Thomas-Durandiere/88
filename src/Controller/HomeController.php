@@ -158,14 +158,19 @@ final class HomeController extends AbstractController
 
 
 
-    #[Route('/boutique', name: 'app_boutique')]
-    public function boutique(EntityManagerInterface $em)
+   #[Route('/boutique', name: 'app_boutique')]
+    public function boutique(EntityManagerInterface $em, OrderRepository $or)
     {
         $repo = $em->getRepository(Products::class);
         $product = $repo->findAll();
 
+        $panierCount = $this->getUser() 
+            ? $or->findCartByUser($this->getUser())?->getTotalQuantity() ?? 0 
+            : 0;
+
         return $this->render('boutique.html.twig', [
-            'listProduct' => $product
+            'listProduct' => $product,
+            'panier_count' => $panierCount   // ← Virgule !
         ]);
     }
 

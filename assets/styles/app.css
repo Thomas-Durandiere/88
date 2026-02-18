@@ -151,11 +151,7 @@ footer {
 
 /* --------------------------- accueil ---------------------- */
 
-.messCmd {
-    font-size: 1.2em;
-    margin-left: 40px;
-    margin-top: 30px;
-}
+
 .bandeauAvis {
     display: flex;
     justify-content: center;
@@ -358,6 +354,11 @@ tbody {
 
 /* --------------------------- Boutique ---------------------- */
 
+.messCmd {
+    font-size: 1.2em;
+    margin-left: 40px;
+    margin-top: 30px;
+}
 .alert {
     background-color: #f7f7f7;
     border: 1px solid black;
@@ -440,6 +441,12 @@ tbody {
     height: 100px;
 }
 
+.panier-badge {
+  background: #ff6b6b; color: white;
+  border-radius: 12px; padding: 0 6px; font-size: 0.8em;
+  font-weight: bold; margin-left: 5px;
+}
+
 /* --------------------------- Panier ---------------------- */
 
 
@@ -473,6 +480,9 @@ tbody {
 }
 .cardPanier img {
     max-width: 80px;
+}
+.incre {
+    padding: 10px;
 }
 .recap {
     position: sticky;
@@ -735,7 +745,7 @@ iframe {
     padding: 10px;
     width: auto;
     height: 45px;
-    margin-left: 30px;
+    margin-left: 0px;
     position: relative;
     display: flex;
     align-items: center;
