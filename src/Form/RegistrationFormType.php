@@ -23,15 +23,15 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom',
+                'label' => 'Nom*',
                 'attr' => ['class' => 'input']
                 ])
             ->add('firstname', TextType::class, [
-                'label' => 'Prénom',
+                'label' => 'Prénom*',
                 'attr' => ['class' => 'input']
                 ])
             ->add('email', EmailType::class, [
-                'label' => 'email',
+                'label' => 'Adresse email*',
                 'attr' => ['class' => 'input']
                 ])
             ->add('plainPassword', PasswordType::class, [
@@ -40,7 +40,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password',
                            'Class' => 'input'],
-                'label' => 'Mot de passe',
+                'label' => 'Mot de passe*',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer un mot de passe',
@@ -74,12 +74,13 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['class' => 'input']
                 ])
             ->add('accepteCGV', CheckboxType::class, [
-                'label' => "J'accepte les conditions d'utilisation",
+                'label' => false,
                 'row_attr' => ['class' => 'checkBox'],
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepter nos conditions ',
                     ]),
+            
                 ],
             ])
         ;

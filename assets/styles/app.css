@@ -700,6 +700,13 @@ iframe {
 .checkBox input {
     margin-left: 20px;
 }
+.mdp {
+    font-size: 0.8em;
+}
+.required {
+    font-size: 1.2em;
+    margin-top: 20px;
+}
 
 /* --------------------------- Connexion ---------------------- */
 
