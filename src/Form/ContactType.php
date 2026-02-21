@@ -24,7 +24,7 @@ class ContactType extends AbstractType
                 'attr' => ['class' => 'input']
                 ])
             ->add('email', EmailType::class, [
-                'label' => 'Couriel',
+                'label' => 'Adresse email',
                 'attr' => ['class' => 'input']
                 ])
             ->add('message', TextareaType::class, [

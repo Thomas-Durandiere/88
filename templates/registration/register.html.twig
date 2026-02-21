@@ -8,15 +8,28 @@
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm, {'attr': {'class': 'formInsc darkMode'}}) }}
+    
+    <p>* Champ obligatoire</p>
 
         {{ form_row(registrationForm.name) }}
         {{ form_row(registrationForm.firstname) }}
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword) }}
+        <p>minimum : 12 caractères, 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial</p>
         {{ form_row(registrationForm.address) }}
         {{ form_row(registrationForm.postal) }}
         {{ form_row(registrationForm.city) }}
         {{ form_row(registrationForm.phone) }}
+
+        <div class="checkBox">
+            <label for="{{ registrationForm.accepteCGV.vars.id }}">
+                J'accepte les 
+                <a href="{{ path('app_cgu') }}" target="_blank">conditions d'utilisation</a>
+                incluant la <a href="{{ path('app_cgu') }}#donnees" target="_blank">politique de confidentialité</a>
+            </label>
+            {{ form_widget(registrationForm.accepteCGV) }}
+            {{ form_errors(registrationForm.accepteCGV) }}
+        </div>
 
         <button type="submit" class="bout">Envoyer</button>
     {{ form_end(registrationForm) }}
